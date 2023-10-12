@@ -1,0 +1,61 @@
+This README file contains information on the contents of the
+meta-ksp0719 layer.
+
+Please see the corresponding sections below for details.
+
+phyLinux
+========
+This release can be build with the phyLinux tool. phyLinux is a wrapper around
+repo. repo itself grabs different git repositories defined in a xml
+manifest. phyLinux itself then does the correct configuration setup.
+
+Getting the sources
+===================
+
+If you have never used the Phytec git server before, you have to record
+the SSH host key in your local ~/.ssh/known_hosts file. Execute
+
+ ssh git@git.phytec.de info
+
+on your machine and type 'yes' to accept the key. It is only needed for the
+first connection.  For all subsequent checkouts via phyLinux you don't have to
+execute the command again.
+
+Along with access to the meta-skeleton repository you should have recieved
+a xml file, defining the software release.
+
+Start of in a new empty folder.
+
+ wget ftp://ftp.phytec.de/pub/Software/Linux/Yocto/Tools/phyLinux
+ chmod +x phyLinux
+ ./phyLinux init -x <your_skeleton>.xml
+
+You now have all needed sources inside sources/. In scripts/ there is
+a customized init script. It copies bblayers.conf, local.conf and
+conf-notes.txt templates. So the needed layers and machine is already
+configured.
+
+More configuration
+==================
+Maybe you want to configure DL_DIR and SSTATE_DIR in your local.conf?
+hint: the init script searches for a site.conf at /etc/yocto/site.conf
+or ~/.site.conf. This is a good place for your common configurations.
+
+
+Start building
+==============
+To build the images for skeleton first the build enviroment needs to
+be sourced:
+
+ source sources/poky/oe-init-build-env
+
+You will recieve an output with the buildable images.
+Start the build with:
+
+ bitbake <image-name>
+
+Images
+======
+Images of the build can be found under
+
+ build/deploy/images/<skeleton-machine>/.
