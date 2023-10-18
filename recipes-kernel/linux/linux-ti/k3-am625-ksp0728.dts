@@ -69,19 +69,6 @@
 		};
 	};
 
-	keys {
-		compatible = "gpio-keys";
-		autorepeat;
-		pinctrl-names = "default";
-		pinctrl-0 = <&gpio_keys_pins_default>;
-
-		key-home {
-			label = "home";
-			linux,code = <KEY_HOME>;
-			gpios = <&main_gpio1 23 GPIO_ACTIVE_HIGH>;
-		};
-	};
-
 	leds {
 		compatible = "gpio-leds";
 		pinctrl-names = "default";
@@ -129,16 +116,11 @@
 		>;
 	};
 
-	gpio_keys_pins_default: gpio-keys-pins-default {
-		pinctrl-single,pins = <
-			AM62X_IOPAD(0x1d4, PIN_INPUT, 7) /* (B15) UART0_RTSn.GPIO1_23 */
-		>;
-	};
-
 	gpio_pins_default: gpio-pins-default {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x1A4, PIN_OUTPUT, 7) /* (B20) MCASP0_ACLKX.GPIO1_11  -> MSP #OE */
 			AM62X_IOPAD(0x1A8, PIN_OUTPUT, 7) /* (D20) MCASP0_AFSX.GPIO1_12  -> MSP BSL Mode */
+			AM62X_IOPAD(0x1d4, PIN_INPUT, 7) /* (B15) UART0_RTSn.GPIO1_23 */
 		>;
 	};
 
