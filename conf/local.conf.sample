@@ -1,6 +1,6 @@
-MACHINE ?= "imx8mm-ksp0719"
+MACHINE ?= "am62-ksp0728-1"
 
-DISTRO ?= "ampliphy-vendor"
+DISTRO ?= "ampliphy"
 
 ########################
 # global configuration #
@@ -13,9 +13,13 @@ DISTRO ?= "ampliphy-vendor"
 
 # License Handling
 #  - Uncomment for i.MX6 proprietary GPU libraries
-#LICENSE_FLAGS_WHITELIST += "license-nxp_v14-june-2016_imx-gpu-viv"
+#LICENSE_FLAGS_ACCEPTED += "license-nxp_v14-june-2016_imx-gpu-viv"
 #  - Uncomment for Freescale i.MX6 VPU firmware blobs
-#LICENSE_FLAGS_WHITELIST += "license-freescale_v12-march-2016_firmware-imx"
+#LICENSE_FLAGS_ACCEPTED += "license-freescale_v12-march-2016_firmware-imx"
+
+# When building multiple distros in the same TOPDIR
+#TMPDIR = "${TOPDIR}/${DISTRO}-tmp"
+#DEPLOY_DIR = "${TOPDIR}/${DISTRO}-deploy"
 
 # build artifacts are deployed here
 DEPLOY_DIR = "${TOPDIR}/deploy"
@@ -31,7 +35,7 @@ BB_GIT_SHALLOW = "1"
 # busybox only supports menuconfig
 #KCONFIG_CONFIG_COMMAND = "menuconfig"
 KCONFIG_CONFIG_COMMAND = "nconfig"
-KCONFIG_CONFIG_COMMAND_pn-busybox = "menuconfig"
+KCONFIG_CONFIG_COMMAND:pn-busybox = "menuconfig"
 
 # SDK will be build for that cpu
 #SDKMACHINE ?= "x86_64"
@@ -42,10 +46,10 @@ BB_DISKMON_DIRS ??= "\
     STOPTASKS,${DL_DIR},1G,100K \
     STOPTASKS,${SSTATE_DIR},1G,100K \
     STOPTASKS,/tmp,100M,100K \
-    ABORT,${TMPDIR},100M,1K \
-    ABORT,${DL_DIR},100M,1K \
-    ABORT,${SSTATE_DIR},100M,1K \
-    ABORT,/tmp,10M,1K"
+    HALT,${TMPDIR},100M,1K \
+    HALT,${DL_DIR},100M,1K \
+    HALT,${SSTATE_DIR},100M,1K \
+    HALT,/tmp,10M,1K"
 
 #######################
 # Image configuration #
@@ -54,24 +58,28 @@ BB_DISKMON_DIRS ??= "\
 # The following line disables the autostart of the phytec-qtdemo by
 # default, but you can start the demo anytime using
 #  $ systemctl start phytec-qtdemo.service
-#SYSTEMD_AUTO_ENABLE_pn-phytec-qtdemo = "disable"
+#SYSTEMD_AUTO_ENABLE:pn-phytec-qtdemo = "disable"
 
 # You can disable and enable FSTYPES as you wish. e.g. 'ext4'.
 # This variable is ordering dependend.
 #IMAGE_FSTYPES = "tar.gz wic ubifs emmc"
 
 # To change the variable for any imx8 machine:
-#IMAGE_FSTYPES_mx8 = "tar.gz wic ubifs emmc"
+#IMAGE_FSTYPES:mx8-generic-bsp = "tar.gz wic wic.bmap"
+
+# phyCORE-i.MX8X uses wic.xz images.
+# To change the variable for imx8x machine only:
+#IMAGE_FSTYPES:mx8x-generic-bsp = "tar.gz wic.xz wic.bmap"
 
 # Turn on debugging options of the kernel
-#DEBUG_BUILD_pn-linux-mainline = "1"
+#DEBUG_BUILD:pn-linux-mainline = "1"
 # Turn on debugging options of the imx kernel
-#DEBUG_BUILD_pn-linux-imx = "1"
+#DEBUG_BUILD:pn-linux-imx = "1"
 # Turn on debugging options of the barebox
-#DEBUG_BUILD_pn-barebox = "1"
+#DEBUG_BUILD:pn-barebox = "1"
 
 # Include kernel sources in SDK
-TOOLCHAIN_TARGET_TASK_append = " kernel-devsrc"
+TOOLCHAIN_TARGET_TASK:append = " kernel-devsrc"
 
 # The default package class of the distro ampliphy is 'package_ipk'. The first
 # value is used as the package manager to build the image and sdk. To build
@@ -83,7 +91,7 @@ TOOLCHAIN_TARGET_TASK_append = " kernel-devsrc"
 #   default, this variable is set to '0'.
 # This example line adds an additional 512 MiB of free space to the root
 # filesystem:
-IMAGE_ROOTFS_EXTRA_SPACE = "524288"
+#IMAGE_ROOTFS_EXTRA_SPACE = "524288"
 
 # See http://www.yoctoproject.org/docs/1.8/ref-manual/ref-manual.html#ref-features-image
 #   "Through these variables, you can add several different predefined
@@ -99,9 +107,6 @@ EXTRA_IMAGE_FEATURES += "debug-tweaks"
 # - "Installs debugging tools such as strace and gdb."
 #EXTRA_IMAGE_FEATURES += "tools-debug"
 
-
-IMAGE_INSTALL_append = "  spitools "
-
 ######################
 # rauc configuration #
 ######################
@@ -115,9 +120,23 @@ IMAGE_INSTALL_append = "  spitools "
 
 # We disable qt widgets per default to save about 10 MB of storage. If
 # you need qt widget support, you can enable it with this line
-#DISTRO_FEATURES_append = " qtwidgets"
+#DISTRO_FEATURES:append = " qtwidgets"
 
-CONF_VERSION = "1"
+IMAGE_INSTALL:append = " lms-eth2spi open-plc-utils"
+
+# open-plc-utils everest-ti-evse-config everest-ti-evse-modules
+#	nodered-flows-ti
+#        python3-pip
+#        python3-ply
+#       python3-cffi
+#        python3-asyncio-glib
+#        python3-cryptography
+#        python3-psutil
+#        python3-netifaces
+#        python3-dateutil
+#"
+
+CONF_VERSION = "2"
 
 # Uncomment to accept NXP EULA (needed, if any NXP / freescale layer is used)
 # EULA can then be found under ../sources/meta-freescale/EULA
@@ -126,3 +145,5 @@ CONF_VERSION = "1"
 # A TISDK BSP requires per default an external toolchain
 # Provide a default path that is compatible to our TISDK docker image
 TOOLCHAIN_BASE ?= "/opt/PHYTEC_BSPs"
+
+CONNECTIVITY_CHECK_URIS = "https://www.google.com/"
