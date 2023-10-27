@@ -69,17 +69,6 @@
 		};
 	};
 
-	leds {
-		compatible = "gpio-leds";
-		pinctrl-names = "default";
-		pinctrl-0 = <&leds_pins_default>, <&user_leds_pins_default>;
-
-		led-1 {
-			gpios = <&main_gpio0 32 GPIO_ACTIVE_HIGH>;
-			linux,default-trigger = "mmc0";
-		};
-	};
-
 	vcc_1v8: regulator-vcc-1v8 {
 		compatible = "regulator-fixed";
 		regulator-name = "VCC_1V8";
@@ -282,12 +271,6 @@
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x048, PIN_OUTPUT, 7) /* (N25) GPMC0_AD3.GPIO0_18 - RST */
 			AM62X_IOPAD(0x04c, PIN_INPUT, 7) /* (P24) GPMC0_AD4.GPIO0_19 - INT */
-		>;
-	};
-
-	user_leds_pins_default: user-leds-pins-default {
-		pinctrl-single,pins = <
-			AM62X_IOPAD(0x084, PIN_OUTPUT, 7) /* (L23) GPMC0_ADVn_ALE.GPIO0_32 */
 		>;
 	};
 
