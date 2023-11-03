@@ -241,17 +241,17 @@
 
 	main_uart2_pins_default: main-uart2-pins-default {
 		pinctrl-single,pins = <
-			AM62X_IOPAD(0x22c, PIN_OUTPUT, 2) /* (B21) MMC1_DAT1.UART2_RTSn */
-			AM62X_IOPAD(0x224, PIN_INPUT, 2) /* (D22) MMC1_DAT3.UART2_RXD */
-			AM62X_IOPAD(0x228, PIN_OUTPUT, 2) /* (C21) MMC1_DAT2.UART2_TXD */
+			AM62X_IOPAD(0x22c, PIN_OUTPUT, 7) /* (B21) MMC1_DAT1.UART2_RTSn */
+			AM62X_IOPAD(0x224, PIN_INPUT, 3) /* (D22) MMC1_DAT3.UART2_RXD */
+			AM62X_IOPAD(0x228, PIN_OUTPUT, 3) /* (C21) MMC1_DAT2.UART2_TXD */
 		>;
 	};
 
 	main_uart3_pins_default: main-uart3-pins-default {
 		pinctrl-single,pins = <
-			AM62X_IOPAD(0x240, PIN_OUTPUT, 2) /* (D17) MMC1_SDCD.UART3_RTSn */
-			AM62X_IOPAD(0x234, PIN_INPUT, 2) /* (B22) MMC1_CLK.UART3_RXD */
-			AM62X_IOPAD(0x23C, PIN_OUTPUT, 2) /* (A21) MMC1_CMD.UART3_TXD */
+			AM62X_IOPAD(0x240, PIN_OUTPUT, 7) /* (D17) MMC1_SDCD.UART3_RTSn */
+			AM62X_IOPAD(0x234, PIN_INPUT, 3 /* (B22) MMC1_CLK.UART3_RXD */
+			AM62X_IOPAD(0x23C, PIN_OUTPUT, 3) /* (A21) MMC1_CMD.UART3_TXD */
 		>;
 	};
 
@@ -434,10 +434,7 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_uart2_pins_default>;
 	linux,rs485-enabled-at-boot-time;
-	rs485-rts-active-high;
 	rts-gpios = <&main_gpio1 44 GPIO_ACTIVE_HIGH>;
-	/*rs485-rx-during-tx;*/
-
 	status = "okay";
 };
 
@@ -445,10 +442,7 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_uart3_pins_default>;
 	linux,rs485-enabled-at-boot-time;
-	rs485-rts-active-high;
 	rts-gpios = <&main_gpio1 48 GPIO_ACTIVE_HIGH>;
-	/*rs485-rx-during-tx;*/
-
 	status = "okay";
 };
 
