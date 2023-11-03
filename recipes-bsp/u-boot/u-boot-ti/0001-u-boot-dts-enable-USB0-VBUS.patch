@@ -1,0 +1,41 @@
+From 0a2096b1134416815d34001d01e215880a6230c9 Mon Sep 17 00:00:00 2001
+From: Alexander Bauer <a.bauer@phytec.de>
+Date: Fri, 3 Nov 2023 15:13:57 +0100
+Subject: [PATCH] u-boot-dts: enable USB0 VBUS
+
+Signed-off-by: Alexander Bauer <a.bauer@phytec.de>
+---
+ arch/arm/dts/k3-am625-phyboard-lyra-rdk.dts | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/dts/k3-am625-phyboard-lyra-rdk.dts b/arch/arm/dts/k3-am625-phyboard-lyra-rdk.dts
+index a438baf542..6e76176674 100644
+--- a/arch/arm/dts/k3-am625-phyboard-lyra-rdk.dts
++++ b/arch/arm/dts/k3-am625-phyboard-lyra-rdk.dts
+@@ -152,6 +152,12 @@
+ 		>;
+ 	};
+ 
++	main_usb0_pins_default: main-usb0-pins-default {
++		pinctrl-single,pins = <
++			AM62X_IOPAD(0x254, PIN_OUTPUT, 0) /* (C20) USB0_DRVVBUS */
++		>;
++	};
++
+ 	main_usb1_pins_default: main-usb1-default-pins {
+ 		pinctrl-single,pins = <
+ 			AM62X_IOPAD(0x258, PIN_OUTPUT, 0) /* (F18) USB1_DRVVBUS */
+@@ -256,7 +262,9 @@
+ };
+ 
+ &usb0 {
+-	dr_mode = "peripheral";
++	pinctrl-names = "default";
++	dr_mode = "host";
++	pinctrl-0 = <&main_usb0_pins_default>;
+ };
+ 
+ &usb1 {
+-- 
+2.25.1
+
