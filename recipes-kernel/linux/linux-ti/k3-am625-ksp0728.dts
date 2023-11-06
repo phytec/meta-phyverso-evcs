@@ -250,7 +250,7 @@
 	main_uart3_pins_default: main-uart3-pins-default {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x240, PIN_OUTPUT, 7) /* (D17) MMC1_SDCD.UART3_RTSn */
-			AM62X_IOPAD(0x234, PIN_INPUT, 3 /* (B22) MMC1_CLK.UART3_RXD */
+			AM62X_IOPAD(0x234, PIN_INPUT, 3) /* (B22) MMC1_CLK.UART3_RXD */
 			AM62X_IOPAD(0x23C, PIN_OUTPUT, 3) /* (A21) MMC1_CMD.UART3_TXD */
 		>;
 	};
