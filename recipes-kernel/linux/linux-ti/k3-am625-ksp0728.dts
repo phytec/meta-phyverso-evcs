@@ -257,20 +257,13 @@
 
 	main_usb0_pins_default: main-usb0-pins-default {
 		pinctrl-single,pins = <
-			AM64X_IOPAD(0x0254, PIN_OUTPUT, 0) /* (E19) USB0_DRVVBUS */
+			AM64X_IOPAD(0x0254, PIN_OUTPUT, 0) /* (C20) USB0_DRVVBUS */
 		>;
 	};
 
 	main_usb1_pins_default: main-usb1-pins-default {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x258, PIN_OUTPUT, 0) /* (F18) USB1_DRVVBUS */
-		>;
-	};
-
-	touch_screen_pins_default: touch-screen-pins-default {
-		pinctrl-single,pins = <
-			AM62X_IOPAD(0x048, PIN_OUTPUT, 7) /* (N25) GPMC0_AD3.GPIO0_18 - RST */
-			AM62X_IOPAD(0x04c, PIN_INPUT, 7) /* (P24) GPMC0_AD4.GPIO0_19 - INT */
 		>;
 	};
 
@@ -339,25 +332,6 @@
 		oldi_out0: endpoint {
 			remote-endpoint = <&lcd_in0>;
 		};
-	};
-};
-
-&main_i2c1 {
-	#address-cells = <1>;
-	#size-cells = <0>;
-
-	touchscreen@5d {
-		compatible = "goodix,gt928";
-		reg = <0x5d>;
-
-		pinctrl-names = "default";
-		pinctrl-0 = <&touch_screen_pins_default>;
-
-		interrupt-parent = <&main_gpio0>;
-		interrupts = <19 IRQ_TYPE_LEVEL_LOW>;
-
-		reset-gpios = <&main_gpio0 18 GPIO_ACTIVE_HIGH>;
-		irq-gpios = <&main_gpio0 19 GPIO_ACTIVE_HIGH>;
 	};
 };
 
