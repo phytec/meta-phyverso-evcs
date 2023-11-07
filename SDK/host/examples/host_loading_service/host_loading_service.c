@@ -317,16 +317,15 @@ int main(int argc, char *argv[])
 	bool is_cg_rmii = false;
 	char buffer[1024];
 	mac_address_t adapter_addr;
-	hpgp_host_interface_t iface;
+	hpgp_host_interface_t iface = 0;
 	void *notification_thread;
 	struct sigaction usr_action;
 	struct sigaction term_action;
 	int failed_counter = 0;
 
-	configuration_binary_file = DEFAULT_CONF_BINARY_PATH;
-	iface = get_iface_from_user_configuration(configuration_binary_file);
+/*	configuration_binary_file = DEFAULT_CONF_BINARY_PATH;
+	iface = get_iface_from_user_configuration(configuration_binary_file);*/
 	devicename = SPI_IFACE_NAME;
-
 	while ((c = getopt(argc, argv, "rtvhc:f:a:i:s:")) != -1)
 	{
 		switch (c)
@@ -378,7 +377,6 @@ int main(int argc, char *argv[])
 	}
 
 	if (pipe(listen_pipefd) == -1) {
-		hlb_log_error("listen pipe error");
 		host_loading_unregister_syslog();
 		return FAILURE;
 	}
@@ -389,7 +387,6 @@ int main(int argc, char *argv[])
 	res = start_wait_for_modem_notification(&notification_thread);
 	if (res != SUCCESS)
 	{
-		hlb_log_error("failed to start notification thread (%d)", res);
 		host_loading_unregister_syslog();
 		return FAILURE;
 	}
@@ -417,7 +414,6 @@ int main(int argc, char *argv[])
 			}
 			if (read(listen_pipefd[0], buffer, sizeof(buffer)) == -1)
 				return FAILURE;
-				
 		}
 		else /* modem_notification = true */
 		{
@@ -445,7 +441,7 @@ int main(int argc, char *argv[])
 				{
 					iface = get_iface_from_user_configuration(configuration_binary_file);
 				}
-
+			
 				iface_name = (iface == HPGP_ETH) ? ETH_IFACE_NAME : devicename;
 				while (attempts_left > 0)
 				{
