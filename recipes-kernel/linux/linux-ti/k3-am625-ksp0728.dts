@@ -284,6 +284,16 @@
 		>;
 	};
 
+	mcu_spi0_pins_default: mcu-spi0-pins-default {
+		pinctrl-single,pins = <
+		AM62X_IOPAD(0x008, PIN_OUTPUT, 0) /* (A7) MCU_SPI0_CLK.MCU_SPI0_CLK */
+		AM62X_IOPAD(0x00c, PIN_OUTPUT, 0) /* (D9) MCU_SPI0_D0.MCU_SPI0_D0 */
+		AM62X_IOPAD(0x010, PIN_INPUT, 0) /* (C9) MCU_SPI0_D1.MCU_SPI0_D1 */
+		AM62X_IOPAD(0x004, PIN_OUTPUT, 0) /* (B8) MCU_SPI0_CS1.MCU_SPI0_CS1 */
+		AM62X_IOPAD(0x04C, PIN_INPUT, 7) /* (B9) WKUP_I2C0_SCL.GPIO0_19 */
+	>;
+};
+
 	wkup_uart0_pins_default: wkup-uart0-pins-default {
 		pinctrl-single,pins = <
 			AM62X_MCU_IOPAD(0x0024, PIN_INPUT, 0) /* (B4) WKUP_UART0_RXD */
@@ -426,6 +436,24 @@
 	pinctrl-0 = <&mcu_mcan1_pins_default>;
 	phys = <&can_tc12>;
 	status = "okay";
+};
+
+&mcu_spi0 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&mcu_spi0_pins_default>;
+	ti,spi-num-cs = <2>;
+	ti,pindir-d0-out-d1-in;
+	status = "okay";
+
+	tpm20@1 {
+		compatible = "infineon,slb9670";
+		reg = <1>;
+		spi-max-frequency = <10000000>;
+		status = "okay";
+	};
 };
 
 &sdhci2 {
