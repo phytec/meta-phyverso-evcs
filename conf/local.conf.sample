@@ -1,4 +1,5 @@
 MACHINE ?= "am62-ksp0728-1"
+#MACHINE ?= "phyboard-lyra-am62xx-3"
 
 DISTRO ?= "ampliphy"
 
