@@ -1,0 +1,14 @@
+[Unit]
+Description=cg5317 Host Loading Service
+After=cg5317-bringup.service
+
+[Service]
+User=root
+Group=root
+ExecStart=/root/examples/host_loading_service/host_loading_service -f /lib/firmware/CG5317-04.02.000.0039-DEFAULT.bin -c /lib/firmware/spi_cco_config.bin -i 0 -s seth0
+
+
+Type=forking
+
+[Install]
+WantedBy=multi-user.target

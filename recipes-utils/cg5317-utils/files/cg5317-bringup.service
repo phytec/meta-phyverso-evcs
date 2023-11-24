@@ -1,0 +1,11 @@
+[Unit]
+Description=cg5317 Interface Bringup Service
+After=network.target
+
+[Service]
+ExecStart=/etc/systemd/system/cg5317-bringup.sh
+User=root
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target
