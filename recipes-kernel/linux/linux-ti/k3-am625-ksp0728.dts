@@ -98,6 +98,9 @@
 };
 
 &main_pmx0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&gpio_pins_default>;
+
 	bl_pwm_pins_default: bl-pwm-pins-default {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x008c, PIN_OUTPUT, 7) /* (L25) GPMC0_WEn.GPIO0_34 */
