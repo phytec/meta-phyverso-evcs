@@ -190,8 +190,7 @@
 			AM62X_IOPAD(0x110, PIN_INPUT_PULLUP, 0) /* (C25) MMC2_DAT1 */
 			AM62X_IOPAD(0x10c, PIN_INPUT_PULLUP, 0) /* (E23) MMC2_DAT2 */
 			AM62X_IOPAD(0x108, PIN_INPUT_PULLUP, 0) /* (D24) MMC2_DAT3 */
-			AM62X_IOPAD(0x124, PIN_INPUT_PULLUP, 0) /* (A23) MMC2_SDCD */
-			AM62X_IOPAD(0x128, PIN_INPUT_PULLDOWN, 0) /* (B23) MMC2_SDWP */
+			AM62X_IOPAD(0x11c, PIN_INPUT, 0) /* (#N/A) MMC2_CLKB */
 		>;
 	};
 
@@ -301,6 +300,12 @@
 	wifi_reset_pin_default: wifi-reset-pin-default {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x084, PIN_OUTPUT, 7) /* (L23) GPMC0_ADVn_ALE.GPIO0_32 */
+		>;
+	};
+
+	wifi_wlirq_pins_default: wifi-wlirq-pins-default {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x128, PIN_INPUT, 7) /* (B23) MMC2_SDWP.MMC2_SDWP */
 		>;
 	};
 };
@@ -488,21 +493,40 @@
 };
 
 &sdhci2 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
 	vmmc-supply = <&vcc_3v3_mmc>;
 	vqmmc-supply = <&vddshv5_sdio>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_mmc2_pins_default>;
+
+	bus-width = <4>;
+	non-removable;
+	/*      no-1-8-v;*/
+	ti,fails-without-test-cd;
+	cap-power-off-card;
+	keep-power-in-suspend;
 	ti,driver-strength-ohm = <50>;
-	disable-wp;
-	no-1-8-v;
+	pm-ignore-notify;
+
+	assigned-clocks = <&k3_clks 157 158>;
+	assigned-clock-parents = <&k3_clks 157 160>;
+
+
+	/*      disable-wp;*/
 	status = "okay";
 
-	wlcore: wlcore@0 {
+	cc33xx: wifi@2 {
 		compatible = "ti,cc33xx";
 		reg = <2>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&wifi_wlirq_pins_default>;
+
 		interrupt-parent = <&main_gpio0>;
-		interrupts = <72 IRQ_TYPE_LEVEL_HIGH>;
-		irq-gpio = <&main_gpio0 72 GPIO_ACTIVE_HIGH>;
+/*              interrupts = <72 IRQ_TYPE_EDGE_FALLING>;*/
+		interrupts = <72 IRQ_TYPE_EDGE_RISING>;
+/*              irq-gpio = <&main_gpio0 72 GPIO_ACTIVE_HIGH>; */
 	};
 };
 
