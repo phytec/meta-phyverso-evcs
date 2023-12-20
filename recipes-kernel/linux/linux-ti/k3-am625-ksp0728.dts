@@ -69,6 +69,32 @@
 		};
 	};
 
+	lte_en: lte-en {
+		compatible = "regulator-fixed";
+		regulator-name = "lte_en";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		enable-active-high;
+		regulator-always-on;
+		vin-supply = <&vdd_3v3>;
+		gpio = <&main_gpio0 32 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&wifi_reset_pin_default>;
+	};
+
+	lte_res: lte-res {
+		compatible = "regulator-fixed";
+		regulator-name = "lte_res";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		enable-active-high;
+		regulator-always-on;
+		vin-supply = <&vdd_3v3>;
+		gpio = <&main_gpio0 31 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&wifi_en_pin_default>;
+	};
+
 	vcc_1v8: regulator-vcc-1v8 {
 		compatible = "regulator-fixed";
 		regulator-name = "VCC_1V8";
@@ -263,6 +289,18 @@
 	usb_typec_int_pins_default: usb-typec-int-pins-default {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x088, PIN_INPUT, 7) /* (L24) GPMC0_OEn_REn.GPIO0_33 */
+		>;
+	};
+
+	wifi_en_pin_default: wifi-en-pin-default {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x07c, PIN_OUTPUT, 7) /* (P25) GPMC0_CLK.GPIO0_31 */
+		>;
+	};
+
+	wifi_reset_pin_default: wifi-reset-pin-default {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x084, PIN_OUTPUT, 7) /* (L23) GPMC0_ADVn_ALE.GPIO0_32 */
 		>;
 	};
 };
