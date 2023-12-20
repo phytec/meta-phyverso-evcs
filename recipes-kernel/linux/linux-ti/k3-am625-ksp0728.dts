@@ -55,7 +55,7 @@
 		compatible = "ti,tcan1042";
 		#phy-cells = <0>;
 		max-bitrate = <5000000>;
-		standby-gpios = <&mcu_gpio0 20 GPIO_ACTIVE_HIGH>;
+/*		standby-gpios = <&mcu_gpio0 20 GPIO_ACTIVE_HIGH>;*/
 	};
 
 	display {
@@ -311,12 +311,19 @@
 };
 
 &mcu_pmx0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&mcu_gpio_pins_default>;
+
+	mcu_gpio_pins_default: mcu_gpio_pins_default {
+		pinctrl-single,pins = <
+			AM62X_MCU_IOPAD(0x50, PIN_OUTPUT, 7) /* (A9) WKUP_I2C0_SDA.MCU_GPIO0_20 */
+		>;
+	};
 
 	mcu_mcan1_pins_default: mcu-mcan1-pins-default {
 		pinctrl-single,pins = <
 			AM62X_MCU_IOPAD(0x38, PIN_INPUT, 0) /* (E15) MCAN0_RX */
 			AM62X_MCU_IOPAD(0x34, PIN_OUTPUT, 0) /* (C15) MCAN0_TX */
-			AM62X_MCU_IOPAD(0x50, PIN_OUTPUT, 7) /* (A9) WKUP_I2C0_SDA.MCU_GPIO0_20 */
 		>;
 	};
 
