@@ -6,7 +6,6 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/features:"
 
 SRC_URI:append = " \
 		file://k3-am625-ksp0728.dts \
-		file://0001-add_etml1010g3dra_rgb.patch \
 		file://0001-add-etml1010g3dra-lvds.patch \
 		file://cc33xx_kernel.patch \
 		file://cc33xx.cfg \
