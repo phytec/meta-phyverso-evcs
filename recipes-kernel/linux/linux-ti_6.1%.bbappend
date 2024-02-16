@@ -11,4 +11,8 @@ SRC_URI:append = " \
 		file://cc33xx.cfg \
 "
 
+do_configure:append(){
+ cp ${WORKDIR}/k3-am625-ksp0728.dts ${S}/arch/arm64/boot/dts/ti
+}
+
 COMPATIBLE_MACHINE:am62-ksp0728-1 = "am62-ksp0728-1"
