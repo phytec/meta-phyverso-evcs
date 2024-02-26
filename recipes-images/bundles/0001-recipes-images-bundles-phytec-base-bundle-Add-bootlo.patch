@@ -1,0 +1,35 @@
+From aaa5c81fa0e2bc7e7a3b9997198331f3e02a0fa6 Mon Sep 17 00:00:00 2001
+From: Leonard Anderweit <l.anderweit@phytec.de>
+Date: Fri, 26 Jan 2024 14:29:44 +0100
+Subject: [PATCH] recipes-images: bundles: phytec-base-bundle: Add bootloader
+ file for u-boot-ti
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Add u-boot.img as placeholder until the bootloader update is implemented. The
+placeholder is necessary to avoid build failures.
+
+Signed-off-by: Leonard Anderweit <l.anderweit@phytec.de>
+Signed-off-by: Stefan Müller-Klieser <s.mueller-klieser@phytec.de>
+---
+ recipes-images/bundles/phytec-base-bundle.inc | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/recipes-images/bundles/phytec-base-bundle.inc b/recipes-images/bundles/phytec-base-bundle.inc
+index 76c5530..7eabe67 100644
+--- a/recipes-images/bundles/phytec-base-bundle.inc
++++ b/recipes-images/bundles/phytec-base-bundle.inc
+@@ -81,7 +81,8 @@ python do_configure:prepend() {
+     bootloader_filename = {
+         "barebox": d.getVar("BAREBOX_BINARY"),
+         "u-boot-imx": "u-boot.imx",
+-        "imx-boot": "imx-boot"
++        "imx-boot": "imx-boot",
++        "u-boot-ti": "u-boot.img"
+     }
+     emmc_boot_path = "%s/%s" % (deploy_dir, "emmc-boot.img")
+     if os.path.islink(emmc_boot_path):
+-- 
+2.25.1
+

@@ -1,0 +1,27 @@
+SUMMARY = "Phytec's image for phyVERSO-EVCS"
+LICENSE = "MIT"
+inherit core-image
+
+IMAGE_ROOTFS_SIZE ?= "8192"
+
+IMAGE_INSTALL = " \
+    packagegroup-machine-base \
+    packagegroup-core-boot \
+    packagegroup-hwtools \
+    packagegroup-benchmark \
+    packagegroup-userland \
+    packagegroup-rt \
+    packagegroup-update \
+    ${@bb.utils.contains("COMBINED_FEATURES", "wifi", "packagegroup-wifi", "", d)} \
+    ${@bb.utils.contains("COMBINED_FEATURES", "3g", "packagegroup-3g", "", d)} \
+    tzdata \
+    ${@bb.utils.contains("MACHINE_FEATURES", "tpm2", "packagegroup-sks-openssl-tpm2", "",  d)} \
+    ${@bb.utils.contains("MACHINE_FEATURES", "tpm2", "packagegroup-sks-pkcs11-tpm2", "", d)} \
+    ${@bb.utils.contains("MACHINE_FEATURES", "tpm2", "packagegroup-sks-provision-tpm2", "", d)} \
+"
+
+#IMAGE_INSTALL:append_update = " packagegroup-update"
+
+IMAGE_INSTALL:append_am62 = " firmwared"
+#    ${@bb.utils.contains("COMBINED_FEATURES", "bluetooth", "packagegroup-bluetooth", "", d)}
+
