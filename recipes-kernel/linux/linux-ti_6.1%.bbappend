@@ -1,6 +1,8 @@
 # Copyright (C) 2019 PHYTEC Messtechnik GmbH,
 # Author: Alexander Bauer <a.bauer@phytec.de>
 
+require recipes-kernel/linux/linux-common-append.inc
+
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 FILESEXTRAPATHS:prepend := "${THISDIR}/features:"
 
