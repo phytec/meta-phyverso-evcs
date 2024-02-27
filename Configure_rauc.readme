@@ -1,6 +1,6 @@
 onfiguring the BSP for rauc build:
 
-* change distro in local.conf to amplihy-rauc
+* change distro in local.conf to ampliphy-rauc
 * adopt your prefered partitions and sizes in sources/meta-ksp0728/scripts/lib/wic/canned-wks/phyVerso-EVCS-rauc-sdimage.wks.inc
 * build image:
 	* $ bitbake phyverso-evcs-image
