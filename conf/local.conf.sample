@@ -1,7 +1,7 @@
 MACHINE ?= "am62-ksp0728-1"
 #MACHINE ?= "phyboard-lyra-am62xx-3"
 
-DISTRO ?= "ampliphy"
+DISTRO ?= "ampliphy-rauc"
 
 ########################
 # global configuration #
@@ -123,19 +123,7 @@ EXTRA_IMAGE_FEATURES += "debug-tweaks"
 # you need qt widget support, you can enable it with this line
 #DISTRO_FEATURES:append = " qtwidgets"
 
-IMAGE_INSTALL:append = " lms-eth2spi open-plc-utils"
-
-# open-plc-utils everest-ti-evse-config everest-ti-evse-modules
-#	nodered-flows-ti
-#        python3-pip
-#        python3-ply
-#       python3-cffi
-#        python3-asyncio-glib
-#        python3-cryptography
-#        python3-psutil
-#        python3-netifaces
-#        python3-dateutil
-#"
+IMAGE_INSTALL:append = " lms-eth2spi open-plc-utils cg5317-utils modemmanager wpa-supplicant"
 
 CONF_VERSION = "2"
 
