@@ -1,0 +1,23 @@
+onfiguring the BSP for rauc build:
+
+* change distro in local.conf to amplihy-rauc
+* adopt your prefered partitions and sizes in sources/meta-ksp0728/scripts/lib/wic/canned-wks/phyVerso-EVCS-rauc-sdimage.wks.inc
+* build image:
+	* $ bitbake phyverso-evcs-image
+* build bundle:
+	* $ $ bitbake phyverso-evcs-headless-bundle
+
+configuring u-boot:
+
+* raucboot is disabled in configuration per default. This can be enabled in u-boot with
+	* $ setenv doraucboot 1
+	* $ saveenv
+	* It can be enabled as default in the u-boot environment patches
+
+Please note:
+
+Our BSP includes a systemd service that checks automatically every USB stick that is inserted, if there exists a rauc bundle on the stick. If a bundle is found, it is installed.
+
+
+
+
