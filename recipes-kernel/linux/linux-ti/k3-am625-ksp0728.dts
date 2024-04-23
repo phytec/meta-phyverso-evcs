@@ -29,6 +29,8 @@
 		usb0 = &usb0;
 		usb1 = &usb1;
 		ethernet1 = &cpsw_port2;
+		can0 = &main_mcan0;
+		can1 = &mcu_mcan1;
 	};
 
 	backlight: backlight {
@@ -479,6 +481,10 @@
 	pinctrl-0 = <&main_uart3_pins_default>;
 	linux,rs485-enabled-at-boot-time;
 	rts-gpios = <&main_gpio1 48 GPIO_ACTIVE_HIGH>;
+	status = "okay";
+};
+
+&mcu_gpio0 {
 	status = "okay";
 };
 
