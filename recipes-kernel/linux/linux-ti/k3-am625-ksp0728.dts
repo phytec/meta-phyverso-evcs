@@ -2,6 +2,7 @@
 /*
  * Copyright (C) 2022 - 2023 PHYTEC Messtechnik GmbH
  * Author: Wadim Egorov <w.egorov@phytec.de>
+ * Author: Alexander Bauer <a.bauer@phytec.de>
  *
  * Product homepage:
  * https://www.phytec.com/product/phyboard-am62x
@@ -25,17 +26,18 @@
 		serial4 = &main_uart2;
 		serial5 = &main_uart3;
 		serial6 = &wkup_uart0;
+		gpio2 = &mcu_gpio0;
 		mmc2 = &sdhci2;
 		usb0 = &usb0;
 		usb1 = &usb1;
 		ethernet1 = &cpsw_port2;
 		can0 = &main_mcan0;
-		can1 = &mcu_mcan1;
+		can1 = &mcu_mcan0;
 	};
 
-	backlight: backlight {
+	backlight0: backlight@0 {
 		pinctrl-names = "default";
-		pinctrl-0 = <&bl_pwm_pins_default>;
+		pinctrl-0 = <&bl_pwm1a_pins_default>;
 
 		compatible = "pwm-backlight";
 
@@ -46,6 +48,19 @@
 		pwms = <&epwm1 0 50000 0>;
 	};
 
+	backlight1: backlight@1 {
+		pinctrl-names = "default";
+		pinctrl-0 = <&bl_pwm1b_pins_default>;
+
+		compatible = "pwm-backlight";
+
+		brightness-levels = <0 4 8 16 32 64 128 255>;
+		default-brightness-level = <6>;
+
+		enable-gpios = <&main_gpio0 35 GPIO_ACTIVE_HIGH>;
+		pwms = <&epwm1 1 50000 0>;
+	};
+
 	can_tc1: can-phy0 {
 		compatible = "ti,tcan1042";
 		#phy-cells = <0>;
@@ -53,25 +68,64 @@
 		standby-gpios = <&main_gpio0 33 GPIO_ACTIVE_HIGH>;
 	};
 
-	can_tc12: can-phy1 {
+	can_tc2: can-phy1 {
 		compatible = "ti,tcan1042";
 		#phy-cells = <0>;
 		max-bitrate = <5000000>;
-/*		standby-gpios = <&mcu_gpio0 20 GPIO_ACTIVE_HIGH>;*/
+		standby-gpios = <&mcu_gpio0 20 GPIO_ACTIVE_HIGH>;
 	};
 
-	display {
-		compatible = "edt,etml1010g3dra";
-		backlight = <&backlight>;
+	display_lvds: display-lvds {
+		compatible = "distec,dd0700mc01";
+		backlight = <&backlight0>;
 
-		port@0 {
-			lcd_in0: endpoint {
+		port {
+			lvds_in0: endpoint {
 				remote-endpoint = <&oldi_out0>;
 			};
 		};
 	};
 
-	lte_en: lte-en {
+	display_rgb: display-rgb {
+		compatible = "distec,dd0700mc01_dpi";
+		backlight = <&backlight1>;
+
+
+		port {
+			dpi_in1: endpoint {
+				remote-endpoint = <&lvds_receiver_out>;
+			};
+		};
+	};
+/*
+	lvds-receiver {
+		compatible = "ti,sn75lvds83", "lvds-encoder";
+
+		ports {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			port@0 {
+				reg = <0>;
+
+				data-mapping = "vesa-24";
+
+				lvds_receiver_in: endpoint {
+					remote-endpoint = <&dss_out1>;
+				};
+			};
+
+			port@1 {
+				reg = <1>;
+				pclk-sample = <1>;
+				dpi_in1: endpoint {
+					remote-endpoint = <&rgb_out>;
+				};
+			};
+		};
+	};
+*/
+/*	lte_en: lte-en {
 		compatible = "regulator-fixed";
 		regulator-name = "lte_en";
 		regulator-min-microvolt = <1800000>;
@@ -81,7 +135,7 @@
 		vin-supply = <&vdd_3v3>;
 		gpio = <&main_gpio0 32 GPIO_ACTIVE_HIGH>;
 		pinctrl-names = "default";
-		pinctrl-0 = <&wifi_reset_pin_default>;
+		pinctrl-0 = <&lte_reset_pin_default>;
 	};
 
 	lte_res: lte-res {
@@ -94,9 +148,9 @@
 		vin-supply = <&vdd_3v3>;
 		gpio = <&main_gpio0 31 GPIO_ACTIVE_HIGH>;
 		pinctrl-names = "default";
-		pinctrl-0 = <&wifi_en_pin_default>;
+		pinctrl-0 = <&lte_en_pin_default>;
 	};
-
+*/
 	vcc_1v8: regulator-vcc-1v8 {
 		compatible = "regulator-fixed";
 		regulator-name = "VCC_1V8";
@@ -129,10 +183,23 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&gpio_pins_default>;
 
-	bl_pwm_pins_default: bl-pwm-pins-default {
+	bl_pwm1a_pins_default: bl-pwm1a-pins-default {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x008c, PIN_OUTPUT, 7) /* (L25) GPMC0_WEn.GPIO0_34 */
 			AM62X_IOPAD(0x019c, PIN_OUTPUT, 6) /* (B18) MCASP0_AXR1.EHRPWM1_A */
+		>;
+	};
+
+	bl_pwm1b_pins_default: bl-pwm1b-pins-default {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x0090, PIN_OUTPUT, 7) /* (M24) GPMC0_BE0n_CLE.GPIO0_35 */
+			AM62X_IOPAD(0x01a0, PIN_OUTPUT, 6) /* (E18) MCASP0_AXR0.EHRPWM1_B */
+		>;
+	};
+
+	blt_wlirq_pins_default: blt-wlirq-pins-default {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x124, PIN_INPUT, 7) /* (A23) X_MMC2_SDCD.GPIO0_71 */
 		>;
 	};
 
@@ -140,7 +207,10 @@
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x1A4, PIN_OUTPUT, 7) /* (B20) MCASP0_ACLKX.GPIO1_11  -> MSP #OE */
 			AM62X_IOPAD(0x1A8, PIN_OUTPUT, 7) /* (D20) MCASP0_AFSX.GPIO1_12  -> MSP BSL Mode */
-			AM62X_IOPAD(0x1d4, PIN_INPUT, 7) /* (B15) UART0_RTSn.GPIO1_23 */
+			AM62X_IOPAD(0x1d4, PIN_OUTPUT, 7) /* (B15) UART0_RTSn.GPIO1_23 */
+		
+			AM62X_IOPAD(0x07c, PIN_OUTPUT, 7) /* (P25) GPMC0_CLK.GPIO0_31 */
+			AM62X_IOPAD(0x084, PIN_OUTPUT, 7) /* (L23) GPMC0_ADVn_ALE.GPIO0_32 */
 		>;
 	};
 
@@ -162,6 +232,7 @@
 			AM62X_IOPAD(0x0070, PIN_OUTPUT, 1) /* (T24) GPMC0_AD13.VOUT0_DATA21 */
 			AM62X_IOPAD(0x0074, PIN_OUTPUT, 1) /* (U25) GPMC0_AD14.VOUT0_DATA22 */
 			AM62X_IOPAD(0x0078, PIN_OUTPUT, 1) /* (U24) GPMC0_AD15.VOUT0_DATA23 */
+
 			AM62X_IOPAD(0x0c0, PIN_OUTPUT, 0) /* (W25) VOUT0_DATA2 */
 			AM62X_IOPAD(0x0c4, PIN_OUTPUT, 0) /* (W24) VOUT0_DATA3 */
 			AM62X_IOPAD(0x0c8, PIN_OUTPUT, 0) /* (Y25) VOUT0_DATA4 */
@@ -174,6 +245,12 @@
 			AM62X_IOPAD(0x0f8, PIN_OUTPUT, 0) /* (AB24) VOUT0_HSYNC */
 			AM62X_IOPAD(0x104, PIN_OUTPUT, 0) /* (AC24) VOUT0_PCLK */
 			AM62X_IOPAD(0x100, PIN_OUTPUT, 0) /* (AC25) VOUT0_VSYNC */
+		>;
+	};
+
+	main_ecap_pins_default:	main-ecap-pins-default {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x0a4, PIN_OUTPUT, 1) /* (M22) GPMC0_DIR.PR0_ECAP0_IN_APWM_OUT */
 		>;
 	};
 
@@ -200,7 +277,7 @@
 			AM62X_IOPAD(0x110, PIN_INPUT_PULLUP, 0) /* (C25) MMC2_DAT1 */
 			AM62X_IOPAD(0x10c, PIN_INPUT_PULLUP, 0) /* (E23) MMC2_DAT2 */
 			AM62X_IOPAD(0x108, PIN_INPUT_PULLUP, 0) /* (D24) MMC2_DAT3 */
-			AM62X_IOPAD(0x11c, PIN_INPUT, 0) /* (#N/A) MMC2_CLKB */
+			AM62X_IOPAD(0x11c, PIN_INPUT_PULLUP, 0) /* (#N/A) MMC2_CLKB */
 		>;
 	};
 
@@ -301,51 +378,53 @@
 		>;
 	};
 
-	wifi_en_pin_default: wifi-en-pin-default {
+/*	lte_en_pin_default: lte-en-pin-default {
 		pinctrl-single,pins = <
-			AM62X_IOPAD(0x07c, PIN_OUTPUT, 7) /* (P25) GPMC0_CLK.GPIO0_31 */
-		>;
+			AM62X_IOPAD(0x07c, PIN_OUTPUT, 7)*/ /* (P25) GPMC0_CLK.GPIO0_31 */
+/*		>;
 	};
 
-	wifi_reset_pin_default: wifi-reset-pin-default {
+	lte_reset_pin_default: lte-reset-pin-default {
 		pinctrl-single,pins = <
-			AM62X_IOPAD(0x084, PIN_OUTPUT, 7) /* (L23) GPMC0_ADVn_ALE.GPIO0_32 */
-		>;
+			AM62X_IOPAD(0x084, PIN_OUTPUT, 7)*/ /* (L23) GPMC0_ADVn_ALE.GPIO0_32 */
+/*		>;
 	};
-
+*/
 	wifi_wlirq_pins_default: wifi-wlirq-pins-default {
 		pinctrl-single,pins = <
-			AM62X_IOPAD(0x128, PIN_INPUT, 7) /* (B23) MMC2_SDWP.MMC2_SDWP */
+			AM62X_IOPAD(0x128, PIN_INPUT_PULLDOWN, 7) /* (B23) MMC2_SDWP.GPIO0_72 */
 		>;
 	};
+
 };
 
 &mcu_pmx0 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&mcu_gpio_pins_default>;
+	/*pinctrl-0 = <&mcu_gpio_pins_default>;*/
 
-	mcu_gpio_pins_default: mcu_gpio_pins_default {
+/*	mcu_gpio_pins_default: mcu_gpio_pins_default {
 		pinctrl-single,pins = <
-			AM62X_MCU_IOPAD(0x50, PIN_OUTPUT, 7) /* (A9) WKUP_I2C0_SDA.MCU_GPIO0_20 */
-		>;
+			AM62X_MCU_IOPAD(0x50, PIN_INPUT, 7)*/ /* (A9) WKUP_I2C0_SDA.MCU_GPIO0_20 */
+/*		>;
 	};
-
-	mcu_mcan1_pins_default: mcu-mcan1-pins-default {
+*/
+	mcu_mcan0_pins_default: mcu-mcan0-pins-default {
 		pinctrl-single,pins = <
 			AM62X_MCU_IOPAD(0x38, PIN_INPUT, 0) /* (E15) MCAN0_RX */
 			AM62X_MCU_IOPAD(0x34, PIN_OUTPUT, 0) /* (C15) MCAN0_TX */
+			AM62X_MCU_IOPAD(0x50, PIN_INPUT, 7) /* (A9) WKUP_I2C0_SDA.MCU_GPIO0_20 */
 		>;
 	};
 
 	mcu_spi0_pins_default: mcu-spi0-pins-default {
 		pinctrl-single,pins = <
-		AM62X_IOPAD(0x008, PIN_OUTPUT, 0) /* (A7) MCU_SPI0_CLK.MCU_SPI0_CLK */
-		AM62X_IOPAD(0x00c, PIN_OUTPUT, 0) /* (D9) MCU_SPI0_D0.MCU_SPI0_D0 */
-		AM62X_IOPAD(0x010, PIN_INPUT, 0) /* (C9) MCU_SPI0_D1.MCU_SPI0_D1 */
-		AM62X_IOPAD(0x004, PIN_OUTPUT, 0) /* (B8) MCU_SPI0_CS1.MCU_SPI0_CS1 */
-		AM62X_IOPAD(0x04C, PIN_INPUT, 7) /* (B9) WKUP_I2C0_SCL.GPIO0_19 */
-	>;
-};
+			AM62X_MCU_IOPAD(0x008, PIN_OUTPUT, 0) /* (A7) MCU_SPI0_CLK.MCU_SPI0_CLK */
+			AM62X_MCU_IOPAD(0x00c, PIN_OUTPUT, 0) /* (D9) MCU_SPI0_D0.MCU_SPI0_D0 */
+			AM62X_MCU_IOPAD(0x010, PIN_INPUT, 0) /* (C9) MCU_SPI0_D1.MCU_SPI0_D1 */
+			AM62X_MCU_IOPAD(0x004, PIN_OUTPUT, 0) /* (B8) MCU_SPI0_CS1.MCU_SPI0_CS1 */
+			AM62X_MCU_IOPAD(0x04C, PIN_INPUT, 7) /* (B9) WKUP_I2C0_SCL.GPIO0_19 */
+		>;
+	};
 
 	wkup_uart0_pins_default: wkup-uart0-pins-default {
 		pinctrl-single,pins = <
@@ -375,6 +454,12 @@
 	};
 };
 
+&ecap0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&main_ecap_pins_default>;
+	status = "okay";
+};
+
 &epwm1 {
 	status = "okay";
 };
@@ -393,7 +478,22 @@
 		reg = <0>;
 
 		oldi_out0: endpoint {
-			remote-endpoint = <&lcd_in0>;
+			remote-endpoint = <&lvds_in0>;
+		};
+	};
+
+	/* VP2: DPI Output */
+	port@1 {
+		reg = <1>;
+
+/*		dss_out1: endpoint {
+			remote-endpoint = <&lvds_receiver_in>;
+			bus-width = <24>;
+		};
+*/
+		lvds_receiver_out: endpoint {
+			remote-endpoint = <&dpi_in1>;
+			bus-width = <24>;
 		};
 	};
 };
@@ -413,6 +513,7 @@
 
 &i2c_som_rtc {
 	enable-level-switching-mode;
+	trickle-resistor-ohms = <3000>;
 };
 
 &main_mcan0 {
@@ -463,8 +564,25 @@
 &main_uart1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_uart1_pins_default>;
-	/* Main UART1 may be used by TIFS firmware */
+	uart-has-rtscts;
 	status = "okay";
+
+	bluetooth:bluetooth {
+	/*	compatible = "brcm,bcm43438-bt";*/
+		compatible = "ti,cc33xxbt";
+/*		clocks = <&bt_osc_32k>;
+		clock-names = "lpo";
+		device-wakeup-gpios = <&gpio2 8 GPIO_ACTIVE_HIGH>;*/
+		interrupt-names = "host irq";
+		interrupt-parent = <&main_gpio0>;
+		interrupts = <71 IRQ_TYPE_EDGE_RISING>;
+/*		max-speed = <2000000>;*/
+		pinctrl-names = "default";
+		pinctrl-0 = <&blt_wlirq_pins_default>;
+/*		shutdown-gpios = <&gpio2 6 GPIO_ACTIVE_HIGH>;
+		vbat-supply = <&reg_vcc_3v3>;
+		vddio-supply = <&reg_vcc_3v3>;*/
+	};
 };
 
 
@@ -488,10 +606,10 @@
 	status = "okay";
 };
 
-&mcu_mcan1 {
+&mcu_mcan0 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&mcu_mcan1_pins_default>;
-	phys = <&can_tc12>;
+	pinctrl-0 = <&mcu_mcan0_pins_default>;
+	phys = <&can_tc2>;
 	status = "okay";
 };
 
@@ -517,6 +635,7 @@
 	#address-cells = <1>;
 	#size-cells = <0>;
 
+/*	vmmc-supply = <&vcc_1v8>;*/
 	vmmc-supply = <&vcc_3v3_mmc>;
 	vqmmc-supply = <&vddshv5_sdio>;
 	pinctrl-names = "default";
@@ -524,18 +643,18 @@
 
 	bus-width = <4>;
 	non-removable;
-	/*      no-1-8-v;*/
+/*no-1-8-v;*/
 	ti,fails-without-test-cd;
 	cap-power-off-card;
 	keep-power-in-suspend;
-	ti,driver-strength-ohm = <100>;
+	ti,driver-strength-ohm = <50>;
 	pm-ignore-notify;
 
 	assigned-clocks = <&k3_clks 157 158>;
 	assigned-clock-parents = <&k3_clks 157 160>;
 
 
-	/*      disable-wp;*/
+/*	disable-wp;*/
 	status = "okay";
 
 	cc33xx: wifi@2 {
@@ -545,9 +664,8 @@
 		pinctrl-0 = <&wifi_wlirq_pins_default>;
 
 		interrupt-parent = <&main_gpio0>;
-/*              interrupts = <72 IRQ_TYPE_EDGE_FALLING>;*/
 		interrupts = <72 IRQ_TYPE_EDGE_RISING>;
-/*              irq-gpio = <&main_gpio0 72 GPIO_ACTIVE_HIGH>; */
+		irq-gpio = <&main_gpio0 72 GPIO_ACTIVE_HIGH>;
 	};
 };
 
