@@ -1,0 +1,22 @@
+From 2c58d24ddf2ef491333e43fba288c6a15ae0f706 Mon Sep 17 00:00:00 2001
+From: Alexander Bauer <a.bauer@phytec.de>
+Date: Wed, 3 Apr 2024 14:41:53 +0200
+Subject: [PATCH] Enable RAW_INITRD for ramfs
+
+Signed-off-by: Alexander Bauer <a.bauer@phytec.de>
+---
+ configs/phycore_am62x_a53_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/phycore_am62x_a53_defconfig b/configs/phycore_am62x_a53_defconfig
+index b285b1804c..3858a0db4b 100644
+--- a/configs/phycore_am62x_a53_defconfig
++++ b/configs/phycore_am62x_a53_defconfig
+@@ -202,3 +202,4 @@ CONFIG_USB_GADGET_DOWNLOAD=y
+ CONFIG_FS_FAT_MAX_CLUSTSIZE=16384
+ CONFIG_SPL_GZIP=y
+ CONFIG_OF_LIBFDT_OVERLAY=y
++CONFIG_SUPPORT_RAW_INITRD=y
+-- 
+2.25.1
+
