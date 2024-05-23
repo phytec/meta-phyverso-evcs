@@ -1,0 +1,26 @@
+From efbea2785f0c7e1624cfa6d9b730bc3250a7bc81 Mon Sep 17 00:00:00 2001
+From: Alexander Bauer <a.bauer@phytec.de>
+Date: Wed, 8 May 2024 15:52:49 +0200
+Subject: [PATCH] cc33xx: disable irq on missing calibration data
+
+Signed-off-by: Alexander Bauer <a.bauer@phytec.de>
+---
+ drivers/net/wireless/ti/cc33xx/boot.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/ti/cc33xx/boot.c b/drivers/net/wireless/ti/cc33xx/boot.c
+index 1ccf2d702fd0..71cdcb660de6 100644
+--- a/drivers/net/wireless/ti/cc33xx/boot.c
++++ b/drivers/net/wireless/ti/cc33xx/boot.c
+@@ -383,7 +383,7 @@ int cc33xx_init_fw(struct cc33xx *wl)
+ 	/* Get static calibration data and send it to FW*/
+ 	ret = download_static_calibration_data(wl);
+ 	if (ret < 0)
+-		return ret;
++		goto disable_irq;
+ 
+ 	ret = cc33xx_hw_init(wl);
+ 	if (ret < 0)
+-- 
+2.25.1
+
