@@ -1,0 +1,9 @@
+source/HLB_legacy_commands.c:31:21:HLB_host_eth_tx_rx_packet	3200	static
+source/HLB_legacy_commands.c:173:21:HLB_host_send_receive_packet_timeout	48	static
+source/HLB_legacy_commands.c:209:14:HLB_write_to_mem	3168	static
+source/HLB_legacy_commands.c:268:14:HLB_query_device	3168	static
+source/HLB_legacy_commands.c:322:14:HLB_set_image_data	3088	static
+source/HLB_legacy_commands.c:355:14:HLB_set_image_header	3072	static
+source/HLB_legacy_commands.c:382:14:HLB_init_copy	3072	static
+source/HLB_legacy_commands.c:404:14:HLB_execute_command	3104	static
+source/HLB_legacy_commands.c:442:14:HLB_decompress_command	3072	static

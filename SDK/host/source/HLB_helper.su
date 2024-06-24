@@ -1,0 +1,17 @@
+source/HLB_helper.c:142:21:HLB_stack_push	16	static
+source/HLB_helper.c:237:21:HLB_remove_packet	0	static
+source/HLB_helper.c:93:21:HLB_stack_create	32	static
+source/HLB_helper.c:309:14:HLB_cleaner_thread_loop	80	static
+source/HLB_helper.c:263:21:HLB_add_packet	80	static
+source/HLB_helper.c:352:8:HLB_get_packet_capacity_rx_db_main_db	0	static
+source/HLB_helper.c:357:8:HLB_get_packet_capacity_rx_db_indication_db	0	static
+source/HLB_helper.c:362:8:HLB_get_remaining_space_rx_db_indication_db	0	static
+source/HLB_helper.c:367:14:HLB_init_rx_db	80	static
+source/HLB_helper.c:558:14:HLB_push_to_rx_db	16	static
+source/HLB_helper.c:586:14:HLB_get_req_id_of_fragmented_msg	64	static
+source/HLB_helper.c:624:14:HLB_find_and_pop_fragment_from_rx_db	96	static
+source/HLB_helper.c:705:14:HLB_find_and_pop_from_rx_db	0	static
+source/HLB_helper.c:711:8:HLB_list_rx_db_main_db_of_msg_and_req_id	64	static
+source/HLB_helper.c:752:8:HLB_list_rx_db_main_db	80	static
+source/HLB_helper.c:786:8:HLB_list_rx_db_indication_db	80	static
+source/HLB_helper.c:815:6:HLB_free_rx_db	32	static

@@ -1,0 +1,4 @@
+source/HLB_host.c:156:14:HLB_rx_loop	1648	static
+source/HLB_host.c:228:15:HLB_init	80	static
+source/HLB_host.c:301:6:HLB_deinit	32	static
+source/HLB_host.c:325:6:HLB_get_version	0	static

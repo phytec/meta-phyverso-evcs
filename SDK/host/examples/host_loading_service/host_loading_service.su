@@ -1,0 +1,11 @@
+host_loading_service.c:233:13:host_loading_ser_term	0	static
+host_loading_service.c:272:21:IO_access_read	48	static
+host_loading_service.c:304:21:user_config_IO_access_read	0	static
+host_loading_service.c:297:21:fw_bin_IO_access_read	0	static
+host_loading_service.c:159:21:reset_modem_using_gpio	48	static
+host_loading_service.c:223:13:host_loading_ser_reload_fw	0	static
+host_loading_service.c:120:12:start_wait_for_modem_notification	32	static
+host_loading_service.c:80:14:wait_for_modem_notification	2096	static
+host_loading_service.c:248:13:host_loading_unregister_syslog	16	static
+host_loading_service.c:137:12:busy_wait_for_flag.constprop	96	static
+host_loading_service.c:311:5:main	5856	static

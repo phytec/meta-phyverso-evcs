@@ -1,0 +1,7 @@
+src/mem_pool.c:44:6:memory_pool_init	48	static
+src/mem_pool.c:65:6:memory_pool_set	0	static
+src/mem_pool.c:70:7:memory_pool_alloc	48	static
+src/mem_pool.c:98:6:memory_pool_free	0	static
+src/mem_pool.c:104:8:memory_pool_get_usage	32	static
+src/mem_pool.c:126:8:memory_pool_get_capacity	32	static
+src/mem_pool.c:148:6:memory_pool_destroy	32	static
