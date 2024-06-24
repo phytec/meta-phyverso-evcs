@@ -655,7 +655,7 @@
 
 
 /*	disable-wp;*/
-	status = "okay";
+	status = "disabled";
 
 	cc33xx: wifi@2 {
 		compatible = "ti,cc33xx";
