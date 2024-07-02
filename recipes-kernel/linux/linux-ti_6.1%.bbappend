@@ -7,7 +7,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 FILESEXTRAPATHS:prepend := "${THISDIR}/features:"
 
 SRC_URI:append = " \
-		file://k3-am625-ksp0728.dts \
+		file://k3-am625-phyverso-evcs-1.dts \
                 file://0001-add-distec-dd-0700-mc01-display-settings.patch \
                 file://0001-add-distec-dd-0700-mc01-dpi-display-settings.patch \
 		file://cc33xx_kernel.patch \
@@ -16,7 +16,7 @@ SRC_URI:append = " \
 "
 
 do_configure:append(){
- cp ${WORKDIR}/k3-am625-ksp0728.dts ${S}/arch/arm64/boot/dts/ti
+ cp ${WORKDIR}/k3-am625-phyverso-evcs-1.dts ${S}/arch/arm64/boot/dts/ti
 }
 
 #file://0001-Add-fortec-displays.patch 
@@ -27,4 +27,4 @@ do_configure:append(){
 #file://0001-add-etml1010g3dra-lvds.patch
 #file://0001-add_etml1010g3dra_rgb.patch
 
-COMPATIBLE_MACHINE:am62-ksp0728-1 = "am62-ksp0728-1"
+COMPATIBLE_MACHINE:am62-phyverso-evcs-1 = "am62-phyverso-evcs-1"
