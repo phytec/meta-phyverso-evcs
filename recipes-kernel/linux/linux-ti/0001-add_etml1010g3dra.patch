@@ -17,15 +17,15 @@ index 3192411218fb..0dc8159a67e8 100644
  };
  
 +static const struct drm_display_mode edt_etml1010g3dra_mode = {
-+        .clock = 72400,
++        .clock = 66500,
 +        .hdisplay = 1280,
-+        .hsync_start = 1280 + 72,
-+        .hsync_end = 1280 + 72 + 8,
-+        .htotal = 1280 + 72 + 8 + 80,
++        .hsync_start = 1280 + 12,
++        .hsync_end = 1280 + 12 + 20,
++        .htotal = 1280 + 12 + 20 + 56,
 +        .vdisplay = 800,
-+        .vsync_start = 800 + 15,
-+        .vsync_end = 800 + 15 + 4,
-+        .vtotal = 800 + 15 + 4 + 19,
++        .vsync_start = 800 + 1,
++        .vsync_end = 800 + 1 + 3,
++        .vtotal = 800 + 1 + 3 + 20,
 +};
 +
 +static const struct panel_desc edt_etml1010g3dra = {
