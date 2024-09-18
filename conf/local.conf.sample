@@ -1,7 +1,6 @@
-MACHINE ?= "am62-ksp0728-1"
-#MACHINE ?= "phyboard-lyra-am62xx-3"
+MACHINE ?= "am62-phyverso-evcs"
 
-DISTRO ?= "ampliphy"
+DISTRO ?= "ampliphy-rauc"
 
 ########################
 # global configuration #

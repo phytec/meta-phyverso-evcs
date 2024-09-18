@@ -7,7 +7,7 @@
 ╚═╝     ╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚══════╝ ╚═════╝
 
                 +-+-+-+-+-+-+-+-+
-                |K|S|P|-|0|7|2|8|
+                | phyVERSO-EVCS +
                 +-+-+-+-+-+-+-+-+
 
 Welcome to the PHYTEC BSP-Yocto buildsystem.
@@ -18,5 +18,5 @@ settings and license configuration. For example you may have to accept the
 Freescale/NXP GPU and VPU licence for an i.MX8 board.
 
 Tested build targets for the yocto bsp are:
-	bitbake phytec-headless-image
+	bitbake phyverso-evcs-image
 

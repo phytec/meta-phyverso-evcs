@@ -8,19 +8,16 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 FILESEXTRAPATHS:prepend := "${THISDIR}/features:"
 
-SRC_URI:append:am62-phyverso-evcs-1 = " \
+SRC_URI:append:am62-phyverso-evcs = " \
 	file://0001-u-boot-dts-enable-USB0-VBUS.patch \
 	file://0001-Enable-RAW_INITRD-for-ramfs.patch \
+	file://0001-u-boot-Add-ddr-phy-reg-count.patch \
 "
 
-SRC_URI:append:am62-phyverso-evcs-1-k3r5 = " \
+SRC_URI:append:am62-phyverso-evcs-k3r5 = " \
 	file://0001-u-boot-dts-enable-USB0-VBUS.patch \
 "
 
-#	file://0002-board-phytec-phycore_am62x-Add-RAUC-to-env.patch
-#	file://0002-include-environment-Add-RAUC-boot-logic.patch
-#	file://0003-configs-phycore_am62x_a53_defconfig-Move-environment-to-MMC.patch
-
-COMPATIBLE_MACHINE:am62-phyverso-evcs-1 = "am62-phyverso-evcs-1"
-COMPATIBLE_MACHINE:am62-phyverso-evcs-1-k3r5 = "am62-phyverso-evcs-1-k3r5"
+COMPATIBLE_MACHINE:am62-phyverso-evcs = "am62-phyverso-evcs"
+COMPATIBLE_MACHINE:am62-phyverso-evcs-k3r5 = "am62-phyverso-evcs-k3r5"
 

@@ -1,2 +1,0 @@
-src/comm_mgr_lib.c:6:14:HLB_init_communication	48	static
-src/comm_mgr_lib.c:39:6:HLB_deinit_communication	32	static

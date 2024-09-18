@@ -1,5 +1,0 @@
-source/HLB_fwload.c:394:21:HLB_load_cpu_images_imp	3056	static
-source/HLB_fwload.c:91:13:HBL_section_checksum_update	64	static
-source/HLB_fwload.c:124:21:HLB_send_data_in_chunks.constprop	3040	static
-source/HLB_fwload.c:786:21:HLB_load_fw_imp	448	dynamic
-source/HLB_fwload.c:1033:14:HLB_load_fw	64	static

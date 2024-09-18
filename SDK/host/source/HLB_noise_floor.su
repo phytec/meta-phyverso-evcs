@@ -1,7 +1,0 @@
-source/HLB_noise_floor.c:375:21:HLB_get_stop_pos	1536	static
-source/HLB_noise_floor.c:416:21:HLB_read_single_sample	1584	static
-source/HLB_noise_floor.c:55:21:HLB_busy_wait_cnf.constprop	80	static
-source/HLB_noise_floor.c:90:21:HLB_reset_modem	1520	static
-source/HLB_noise_floor.c:333:21:HLB_update_force_gain	1520	static
-source/HLB_noise_floor.c:139:21:HLB_parse_slog_ocla_buffer	1552	static
-source/HLB_noise_floor.c:542:14:HLB_get_noise_floor	128	dynamic
