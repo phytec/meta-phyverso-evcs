@@ -12,6 +12,9 @@ IMAGE_INSTALL = " \
     packagegroup-userland \
     packagegroup-rt \
     packagegroup-update \
+    open-plc-utils \
+    cg5317-utils \
+    lms-eth2spi \
     ${@bb.utils.contains("COMBINED_FEATURES", "wifi", "packagegroup-ti-wifi", "", d)} \
     ${@bb.utils.contains("COMBINED_FEATURES", "bluetooth", "packagegroup-bluetooth", "", d)} \
     ${@bb.utils.contains("COMBINED_FEATURES", "3g", "packagegroup-3g", "", d)} \

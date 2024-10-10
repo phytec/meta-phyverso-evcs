@@ -5,8 +5,8 @@ After=cg5317-bringup.service
 [Service]
 User=root
 Group=root
-ExecStartPre=/root/examples/host_loading_service/host_loading_service -f /lib/firmware/CG5317-04.02.000.0039-DEFAULT.bin -c /lib/firmware/spi_sta_config.bin -i 0 -s seth1
-ExecStart=/root/examples/host_loading_service/host_loading_service -f /lib/firmware/CG5317-04.02.000.0039-DEFAULT.bin -c /lib/firmware/spi_sta_config.bin -i 0 -s seth0
+ExecStartPre=/root/examples/host_loading_service/host_loading_service -f /lib/firmware/FW.bin -c /lib/firmware/spi_ev_config.bin -i 0 -s seth1
+ExecStart=/root/examples/host_loading_service/host_loading_service -f /lib/firmware/FW.bin -c /lib/firmware/spi_ev_config.bin -i 0 -s seth0
 
 
 Type=forking
