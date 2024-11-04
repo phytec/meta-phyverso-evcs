@@ -46,6 +46,7 @@
 };
 
 &main_pmx0 {
+
 	gpio_msp_default: gpio-msp-default {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x1A4, PIN_OUTPUT, 7) /* (B20) MCASP0_ACLKX.GPIO1_11  -> MSP #OE */
@@ -58,6 +59,13 @@
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x07c, PIN_OUTPUT, 7) /* (P25) GPMC0_CLK.GPIO0_31 */
 			AM62X_IOPAD(0x084, PIN_OUTPUT, 7) /* (L23) GPMC0_ADVn_ALE.GPIO0_32 */
+		>;
+	};
+
+	gpio_phyverso_acc: gpio_phyverso_acc {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x094, PIN_INPUT, 7) /* (N20) GPMC0_BE1n.GPIO0_36 */
+			AM62X_IOPAD(0x098, PIN_INPUT, 7) /* (U23) GPMC0_WAIT0.GPIO0_37 */
 		>;
 	};
 
@@ -221,12 +229,12 @@
 
 &main_gpio0 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&gpio_lte_default>;
+	pinctrl-0 = <&gpio_lte_default>, <&gpio_phyverso_acc>;
 	gpio-line-names = "", "", "", "", "", "", "", "", \
 			  "", "", "", "", "", "", "", "", \
 			  "", "", "", "", "", "", "", "", \
 			  "", "", "", "", "", "", "", "LTE_OFF", \
-			  "LTE_RESET", "", "", "", "", "", "", "";
+			  "LTE_RESET", "", "", "", "EMERGENCY_CON1", "EMERGENCY_CON2", "", "";
 	status = "okay";
 };
 
