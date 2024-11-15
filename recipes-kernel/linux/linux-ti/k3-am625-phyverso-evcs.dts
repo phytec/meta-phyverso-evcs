@@ -46,6 +46,11 @@
 };
 
 &main_pmx0 {
+	gpio_uart2_rts: gpio_uart2_rts {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x22c, PIN_OUTPUT, 7) /* (B21) MMC1_DAT1.GPIO1_44 */
+		>;
+	};
 
 	gpio_msp_default: gpio-msp-default {
 		pinctrl-single,pins = <
@@ -143,7 +148,6 @@
 
 	main_uart2_pins_default: main-uart2-pins-default {
 		pinctrl-single,pins = <
-			AM62X_IOPAD(0x22c, PIN_OUTPUT, 7) /* (B21) MMC1_DAT1.UART2_RTSn */
 			AM62X_IOPAD(0x224, PIN_INPUT_PULLUP, 3) /* (D22) MMC1_DAT3.UART2_RXD */
 			AM62X_IOPAD(0x228, PIN_OUTPUT, 3) /* (C21) MMC1_DAT2.UART2_TXD */
 		>;
@@ -240,11 +244,13 @@
 
 &main_gpio1 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&gpio_msp_default>;
+	pinctrl-0 = <&gpio_msp_default>, <&gpio_uart2_rts>;
 	gpio-line-names = "", "", "", "", "", "", "", "", \
 			  "", "", "", "MSP_OE", "MSP_BSL", "", "", "", \
 			  "", "", "", "", "", "", "MSP_RST", "", \
-			  "", "", "", "", "", "", "", "";
+			  "", "", "", "", "", "", "", "", \
+			  "", "", "", "", "", "", "", "", \
+			  "", "", "", "", "UART2_RTS", "", "", "";
 	status = "okay";
 };
 
@@ -312,7 +318,6 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_uart2_pins_default>;
 	linux,rs485-enabled-at-boot-time;
-	rts-gpios = <&main_gpio1 44 GPIO_ACTIVE_HIGH>;
 	status = "okay";
 };
 
