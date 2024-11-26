@@ -64,12 +64,12 @@ partitions:
 
   - label: factory_data
     type: logical
-    filesystem: null
+    filesystem: ext4
     size: 64MiB
     block-size: 4kiB
 
   - label: overlay
     type: logical
-    filesystem: null
+    filesystem: ext4
     size: 4096MiB
     block-size: 4kiB
