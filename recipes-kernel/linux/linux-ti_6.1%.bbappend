@@ -10,6 +10,8 @@ SRC_URI:append = " \
 		file://k3-am625-phyverso-evcs.dts \
                 file://0001-add-distec-dd-0700-mc01-display-settings.patch \
                 file://0001-add-distec-dd-0700-mc01-dpi-display-settings.patch \
+		file://dd0700mc01_dpi.dtso \
+		file://dd0700mc01_lvds.dtso \
 		file://cc33xx_kernel.patch \
 		file://0001-cc33xx-disable-irq-on-missing-calibration-data.patch \
 		file://cc33xx.cfg \
@@ -17,6 +19,13 @@ SRC_URI:append = " \
 
 do_configure:append(){
  cp ${WORKDIR}/k3-am625-phyverso-evcs.dts ${S}/arch/arm64/boot/dts/ti
+}
+
+do_compile:prepend () {
+                cp "${WORKDIR}/dd0700mc01_dpi.dtso" \
+       "${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts/ti/"
+                cp "${WORKDIR}/dd0700mc01_lvds.dtso" \
+       "${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts/ti/"
 }
 
 COMPATIBLE_MACHINE:am62-phyverso-evcs = "am62-phyverso-evcs"

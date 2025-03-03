@@ -1,0 +1,103 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (C) 2022 - 2023 PHYTEC Messtechnik GmbH
+ * Author: Alexander Bauer <a.bauer@phytec.de>
+ *
+ * Product homepage:
+ * https://www.phytec.com/product/phyboard-am62x
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/leds/common.h>
+#include <dt-bindings/net/ti-dp83867.h>
+#include "k3-pinctrl.h"
+
+/dts-v1/;
+/plugin/;
+
+/ {
+        compatible = "phytec,am625-phyverso-evcs",
+                     "phytec,am62-phycore-som", "ti,am625";
+};
+
+&{/} {
+	backlight1: backlight@1 {
+		pinctrl-names = "default";
+		pinctrl-0 = <&bl_pwm1b_pins_default>;
+
+		compatible = "pwm-backlight";
+
+		brightness-levels = <0 4 8 16 32 64 128 255>;
+		default-brightness-level = <6>;
+
+		enable-gpios = <&main_gpio0 35 GPIO_ACTIVE_HIGH>;
+		pwms = <&epwm1 1 50000 0>;
+	};
+
+	display_rgb: display-rgb {
+		compatible = "distec,dd0700mc01_dpi";
+		backlight = <&backlight1>;
+
+
+		port {
+			dpi_in1: endpoint {
+				remote-endpoint = <&lvds_receiver_out>;
+			};
+		};
+	};
+};
+
+&main_pmx0 {
+	pinctrl-names = "default";
+
+	bl_pwm1b_pins_default: bl-pwm1b-pins-default {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x0090, PIN_OUTPUT, 7) /* (M24) GPMC0_BE0n_CLE.GPIO0_35 */
+			AM62X_IOPAD(0x01a0, PIN_OUTPUT, 6) /* (E18) MCASP0_AXR0.EHRPWM1_B */
+		>;
+	};
+
+	main_oldi0_pins_default: main-oldi0-pins-default {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x0260, PIN_OUTPUT, 0) /* (AA5) OLDI0_A0N */
+			AM62X_IOPAD(0x025c, PIN_OUTPUT, 0) /* (Y6) OLDI0_A0P */
+			AM62X_IOPAD(0x0268, PIN_OUTPUT, 0) /* (AD3) OLDI0_A1N */
+			AM62X_IOPAD(0x0264, PIN_OUTPUT, 0) /* (AB4) OLDI0_A1P */
+			AM62X_IOPAD(0x0270, PIN_OUTPUT, 0) /* (Y8) OLDI0_A2N */
+			AM62X_IOPAD(0x026c, PIN_OUTPUT, 0) /* (AA8) OLDI0_A2P */
+			AM62X_IOPAD(0x0278, PIN_OUTPUT, 0) /* (AB6) OLDI0_A3N */
+			AM62X_IOPAD(0x0274, PIN_OUTPUT, 0) /* (AA7) OLDI0_A3P */
+			AM62X_IOPAD(0x02a0, PIN_OUTPUT, 0) /* (AD4) OLDI0_CLK0N */
+			AM62X_IOPAD(0x029c, PIN_OUTPUT, 0) /* (AE3) OLDI0_CLK0P */
+		>;
+	};
+
+};
+
+&dss {
+	pinctrl-names = "default";
+	pinctrl-0 = <&main_oldi0_pins_default>;
+	status = "okay";
+};
+
+&dss_ports {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	/* VP2: DPI Output */
+	port@1 {
+		reg = <1>;
+
+		lvds_receiver_out: endpoint {
+			remote-endpoint = <&dpi_in1>;
+			bus-width = <24>;
+		};
+	};
+};
+
+&epwm1 {
+	status = "okay";
+};
+
