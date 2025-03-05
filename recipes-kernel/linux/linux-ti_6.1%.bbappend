@@ -15,6 +15,7 @@ SRC_URI:append = " \
 		file://cc33xx_kernel.patch \
 		file://0001-cc33xx-disable-irq-on-missing-calibration-data.patch \
 		file://cc33xx.cfg \
+		file://cc33xx.dtso \
 "
 
 do_configure:append(){
@@ -25,6 +26,8 @@ do_compile:prepend () {
                 cp "${WORKDIR}/dd0700mc01_dpi.dtso" \
        "${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts/ti/"
                 cp "${WORKDIR}/dd0700mc01_lvds.dtso" \
+       "${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts/ti/"
+                cp "${WORKDIR}/cc33xx.dtso" \
        "${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts/ti/"
 }
 
