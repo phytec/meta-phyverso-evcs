@@ -12,6 +12,7 @@ SRC_URI:append = " \
                 file://0001-add-distec-dd-0700-mc01-dpi-display-settings.patch \
 		file://dd0700mc01_dpi.dtso \
 		file://dd0700mc01_lvds.dtso \
+		file://k3-am62-phyboard-lyra-oldi-ac209a.dtso \
 		file://cc33xx_kernel.patch \
 		file://0001-cc33xx-disable-irq-on-missing-calibration-data.patch \
 		file://cc33xx.cfg \
@@ -26,6 +27,8 @@ do_compile:prepend () {
                 cp "${WORKDIR}/dd0700mc01_dpi.dtso" \
        "${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts/ti/"
                 cp "${WORKDIR}/dd0700mc01_lvds.dtso" \
+       "${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts/ti/"
+                cp "${WORKDIR}/k3-am62-phyboard-lyra-oldi-ac209a.dtso" \
        "${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts/ti/"
                 cp "${WORKDIR}/cc33xx.dtso" \
        "${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts/ti/"
