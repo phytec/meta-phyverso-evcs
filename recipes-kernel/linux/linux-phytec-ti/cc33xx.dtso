@@ -1,0 +1,115 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (C) 2022 - 2023 PHYTEC Messtechnik GmbH
+ * Author: Alexander Bauer <a.bauer@phytec.de>
+ *
+ * Product homepage:
+ * https://www.phytec.com/product/phyboard-am62x
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/leds/common.h>
+#include <dt-bindings/net/ti-dp83867.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+#include "k3-pinctrl.h"
+
+/dts-v1/;
+/plugin/;
+
+/ {
+        compatible = "phytec,am625-phyverso-evcs",
+                     "phytec,am62-phycore-som", "ti,am625";
+
+	vcc_3v3_mmc: regulator-vcc-3v3-mmc {
+		compatible = "regulator-fixed";
+		regulator-name = "VCC_3V3_MMC";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-always-on;
+		regulator-boot-on;
+	};
+};
+
+&main_pmx0 {
+	pinctrl-names = "default";
+
+	main_mmc2_pins_default: main-mmc2-pins-default {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x120, PIN_INPUT_PULLUP, 0) /* (C24) MMC2_CMD */
+			AM62X_IOPAD(0x118, PIN_INPUT_PULLDOWN, 0) /* (D25) MMC2_CLK */
+			AM62X_IOPAD(0x114, PIN_INPUT_PULLUP, 0) /* (B24) MMC2_DAT0 */
+			AM62X_IOPAD(0x110, PIN_INPUT_PULLUP, 0) /* (C25) MMC2_DAT1 */
+			AM62X_IOPAD(0x10c, PIN_INPUT_PULLUP, 0) /* (E23) MMC2_DAT2 */
+			AM62X_IOPAD(0x108, PIN_INPUT_PULLUP, 0) /* (D24) MMC2_DAT3 */
+			AM62X_IOPAD(0x11c, PIN_INPUT_PULLUP, 0) /* (#N/A) MMC2_CLKB */
+		>;
+	};
+
+	main_uart1_pins_default: main-uart1-pins-default {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x194, PIN_INPUT, 2) /* (B19) MCASP0_AXR3.UART1_CTSn */
+			AM62X_IOPAD(0x198, PIN_OUTPUT, 2) /* (A19) MCASP0_AXR2.UART1_RTSn */
+			AM62X_IOPAD(0x1ac, PIN_INPUT, 2) /* (E19) MCASP0_AFSR.UART1_RXD */
+			AM62X_IOPAD(0x1b0, PIN_OUTPUT, 2) /* (A20) MCASP0_ACLKR.UART1_TXD */
+		>;
+	};
+
+	wifi_wlirq_pins_default: wifi-wlirq-pins-default {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x128, PIN_INPUT_PULLDOWN, 7) /* (B23) MMC2_SDWP.GPIO0_72 */
+		>;
+	};
+
+};
+
+
+&main_uart1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&main_uart1_pins_default>;
+	status = "okay";
+
+	bluetooth {
+		compatible = "ti,cc33xx-bt";
+		max-speed = <115200>;
+		cc33xx-supply = <&vcc_3v3_mmc>;
+	};
+};
+
+
+&sdhci2 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	vmmc-supply = <&vcc_3v3_mmc>;
+	vqmmc-supply = <&vddshv5_sdio>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&main_mmc2_pins_default>;
+
+	bus-width = <4>;
+	non-removable;
+	ti,fails-without-test-cd;
+	cap-power-off-card;
+	keep-power-in-suspend;
+	ti,driver-strength-ohm = <50>;
+	pm-ignore-notify;
+
+	assigned-clocks = <&k3_clks 157 158>;
+	assigned-clock-parents = <&k3_clks 157 160>;
+
+
+	status = "okay";
+
+	cc33xx: wifi@2 {
+		compatible = "ti,cc3301";
+		reg = <2>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&wifi_wlirq_pins_default>;
+
+		interrupt-parent = <&main_gpio0>;
+		interrupts = <72 IRQ_TYPE_EDGE_RISING>;
+		irq-gpio = <&main_gpio0 72 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+

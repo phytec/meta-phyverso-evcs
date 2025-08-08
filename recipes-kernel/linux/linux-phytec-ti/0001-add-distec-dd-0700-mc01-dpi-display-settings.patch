@@ -1,0 +1,65 @@
+From 5a09585de96fe692598d7663f5306309b0999dd9 Mon Sep 17 00:00:00 2001
+From: Alexander Bauer <a.bauer@phytec.de>
+Date: Wed, 17 Apr 2024 13:35:57 +0200
+Subject: [PATCH] linux-imx: add distec dd-0700-mc01 display settings
+
+Signed-off-by: Alexander Bauer <a.bauer@phytec.de>
+---
+ drivers/gpu/drm/panel/panel-simple.c | 33 ++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index 1efa0fee8b6d..24c6f4d57305 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -1519,6 +1519,37 @@ static const struct panel_desc dataimage_scf0700c48ggu18 = {
+ 	.bus_flags = DRM_BUS_FLAG_DE_HIGH | DRM_BUS_FLAG_PIXDATA_DRIVE_POSEDGE,
+ };
+ 
++static const struct display_timing distec_dd0700mc01_dpi_timings = {
++	.pixelclock = { 25000000, 30400000, 45000000 },
++	.hactive = { 800, 800, 800 },
++	.hfront_porch = { 8, 75, 75 },
++	.hback_porch = { 8, 75, 75 },
++	.hsync_len = { 4, 10, 10 },
++	.vactive = { 480, 480, 480 },
++	.vfront_porch = { 1, 20, 20 },
++	.vback_porch = { 1, 20, 20 },
++	.vsync_len = { 1, 8, 8 },
++};
++
++static const struct panel_desc distec_dd0700mc01_dpi = {
++	.timings = &distec_dd0700mc01_dpi_timings,
++	.num_timings = 1,
++	.bpc = 8,
++	.size = {
++		.width = 152,
++		.height = 91,
++	},
++/*	.delay = {
++		.prepare = 200,
++		.enable = 50,
++		.disable = 50,
++		.unprepare = 1000,
++	},*/
++       .bus_format = MEDIA_BUS_FMT_RGB888_1X24,
++	.bus_flags = DRM_BUS_FLAG_DE_HIGH,
++	.connector_type = DRM_MODE_CONNECTOR_DPI,
++};
++
+ static const struct display_timing dlc_dlc0700yzg_1_timing = {
+ 	.pixelclock = { 45000000, 51200000, 57000000 },
+ 	.hactive = { 1024, 1024, 1024 },
+@@ -4201,6 +4231,9 @@ static const struct of_device_id platform_of_match[] = {
+ 	}, {
+ 		.compatible = "dataimage,scf0700c48ggu18",
+ 		.data = &dataimage_scf0700c48ggu18,
++	}, {
++		.compatible = "distec,dd0700mc01_dpi",
++		.data = &distec_dd0700mc01_dpi,
+ 	}, {
+ 		.compatible = "dlc,dlc0700yzg-1",
+ 		.data = &dlc_dlc0700yzg_1,
+-- 
+2.25.1
+

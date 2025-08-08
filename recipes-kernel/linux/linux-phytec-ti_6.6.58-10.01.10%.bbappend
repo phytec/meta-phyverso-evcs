@@ -13,11 +13,10 @@ SRC_URI:append = " \
 		file://dd0700mc01_dpi.dtso \
 		file://dd0700mc01_lvds.dtso \
 		file://k3-am62-phyboard-lyra-oldi-ac209a.dtso \
-		file://cc33xx_kernel.patch \
-		file://0001-cc33xx-disable-irq-on-missing-calibration-data.patch \
-		file://cc33xx.cfg \
 		file://cc33xx.dtso \
+		file://cc33xx.cfg  \
 "
+
 
 do_configure:append(){
  cp ${WORKDIR}/k3-am625-phyverso-evcs.dts ${S}/arch/arm64/boot/dts/ti
@@ -33,5 +32,6 @@ do_compile:prepend () {
                 cp "${WORKDIR}/cc33xx.dtso" \
        "${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts/ti/"
 }
+
 
 COMPATIBLE_MACHINE:am62-phyverso-evcs = "am62-phyverso-evcs"
