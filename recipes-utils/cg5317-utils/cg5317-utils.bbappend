@@ -6,33 +6,28 @@ LIC_FILES_CHKSUM = "file://../COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI += "file://cg5317-bringup.service \
-           file://cg5317-bringup.sh \
-           file://cg5317-host.service \
-           file://mtbf-resets.service \
-           file://resetmodem.sh \
-           file://COPYING.MIT \
-           "
-
-RDEPENDS:${PN} += "libgpiod"
+SRC_URI += " \
+	file://mtbf-resets.service \
+	file://cg5317_0.cfg \
+	file://cg5317_1.cfg \
+	file://26-seth1.network \
+	file://COPYING.MIT \
+"
 
 do_install:append() {
 	install -d ${D}${sysconfdir}/systemd/system/
-	install -m 0644 ${WORKDIR}/cg5317-bringup.service ${D}${sysconfdir}/systemd/system
-	install -m 0644 ${WORKDIR}/cg5317-host.service ${D}${sysconfdir}/systemd/system
 	install -m 0644 ${WORKDIR}/mtbf-resets.service ${D}${sysconfdir}/systemd/system
-
-	install -d ${D}${sysconfdir}/systemd/system/multi-user.target.wants
-	ln -sf ../cg5317-bringup.service ${D}${sysconfdir}/systemd/system/multi-user.target.wants/
-	ln -sf ../cg5317-host.service ${D}${sysconfdir}/systemd/system/multi-user.target.wants/
-
-	install -d ${D}${sysconfdir}/systemd/system/default.target.wants
-	ln -sf ../mtbf-resets.service ${D}${sysconfdir}/systemd/system/default.target.wants/
-
-	install -m 0755 ${WORKDIR}/resetmodem.sh ${D}${sysconfdir}/systemd/system
-	install -m 0755 ${WORKDIR}/cg5317-bringup.sh ${D}${sysconfdir}/systemd/system
+        install -d ${D}${sysconfdir}/lumissil
+        install -m 0644 ${WORKDIR}/cg5317_0.cfg ${D}${sysconfdir}/lumissil/
+        install -m 0644 ${WORKDIR}/cg5317_1.cfg ${D}${sysconfdir}/lumissil/
+        install -d ${D}${systemd_unitdir}/network
+        install -m 0644 ${WORKDIR}/26-seth1.network  ${D}${systemd_unitdir}/network/
 }
 
-FILES:${PN} += "${base_libdir}/systemd/system"
-FILES:${PN} += "/lib/firmware/*"
+FILES:${PN} += "${systemd_unitdir}/**"
+FILES:${PN} += "${libdir}/firmware/*"
+FILES:${PN} += "${ROOT_HOME}/**"
+FILES:${PN} += "${sysconfdir}/lumissil/*"
 
+
+SYSTEMD_SERVICE:${PN} = "cg5317-host@1.service"

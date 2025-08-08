@@ -1,0 +1,10 @@
+[Match]
+Name=seth1
+
+[Network]
+DHCP=yes
+Address=169.254.200.131/16
+
+[Link]
+ActivationPolicy=always-up
+MACAddress=
