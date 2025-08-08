@@ -3,9 +3,10 @@ HOMEPAGE = "http://www.phytec.de"
 
 DEP_BOOTLOADER ?= "${PREFERRED_PROVIDER_virtual/bootloader}"
 DEP_BOOTLOADER:mx8-nxp-bsp = "${IMAGE_BOOTLOADER}"
+DEP_BOOTLOADER:mx91-nxp-bsp = "${IMAGE_BOOTLOADER}"
 DEP_BOOTLOADER:mx93-nxp-bsp = "${IMAGE_BOOTLOADER}"
+DEP_BOOTLOADER:k3 = "${IMAGE_BOOTLOADER}"
 do_bundle[depends] += "phytec-dev-ca-native:do_install"
-do_emmc_boot[depends] += "${DEP_BOOTLOADER}:do_deploy"
 
 inherit bundle image-artifact-names
 
@@ -17,6 +18,7 @@ RAUC_BUNDLE_COMPATIBLE ?= "${MACHINE}"
 
 RAUC_BUNDLE_SLOTS ?= " \
     rootfs \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'rauc-appfs', 'appfs', '', d)} \
     ${@bb.utils.contains('MACHINE_FEATURES','emmc','boot bootloader','kernel dtb', d)} \
 "
 
@@ -38,7 +40,14 @@ RAUC_SLOT_dtb[type] ?= "file"
 RAUC_SLOT_dtb[file] ?= "${@first_dtb(d)}"
 def first_dtb(d):
     dtbs = d.getVar('KERNEL_DEVICETREE')
-    return dtbs.split()[0]
+    if not dtbs:
+        return ''
+    return os.path.basename(dtbs.split()[0])
+
+RAUC_SLOT_appfs ?= "rauc-appfs-example"
+RAUC_SLOT_appfs[type] ?= "file"
+RAUC_SLOT_appfs[file] ?= "rauc-appfs-example.tar.gz"
+RAUC_SLOT_appfs[rename] ?= "rauc-appfs-example.tar.gz"
 
 RAUC_SLOT_boot ?= "${PREFERRED_PROVIDER_virtual/kernel}"
 RAUC_SLOT_boot[type] ?= "boot"
@@ -81,8 +90,9 @@ python do_configure:prepend() {
     bootloader_filename = {
         "barebox": d.getVar("BAREBOX_BINARY"),
         "u-boot-imx": "u-boot.imx",
+        "u-boot-phytec": d.getVar("IMAGE_BOOTLOADER"),
         "imx-boot": "imx-boot",
-        "u-boot-ti": "u-boot.img"
+        "ti-boot-container": "ti-boot-container.img"
     }
     emmc_boot_path = "%s/%s" % (deploy_dir, "emmc-boot.img")
     if os.path.islink(emmc_boot_path):
@@ -116,5 +126,7 @@ do_deploy:append() {
 RAUC_KEY_FILE ?= "${CERT_PATH}/rauc-intermediate/private/development-1.key.pem"
 RAUC_CERT_FILE ?= "${CERT_PATH}/rauc-intermediate/development-1.cert.pem"
 RAUC_KEYRING_FILE ?= "${CERT_PATH}/main-ca/mainca-rsa.crt.pem"
-BUNDLE_ARGS += "--intermediate=${CERT_PATH}/rauc-intermediate/ca.cert.pem"
-CONVERT_ARGS += "--intermediate=${CERT_PATH}/rauc-intermediate/ca.cert.pem"
+RAUC_INTERMEDIATE_CERT_FILE ?= "${CERT_PATH}/rauc-intermediate/ca.cert.pem"
+RAUC_INTERMEDIATE = "${@oe.utils.conditional('RAUC_INTERMEDIATE_CERT_FILE', "", "", "--intermediate=${RAUC_INTERMEDIATE_CERT_FILE}", d)}"
+BUNDLE_ARGS += "${RAUC_INTERMEDIATE}"
+CONVERT_ARGS += "${RAUC_INTERMEDIATE}"
