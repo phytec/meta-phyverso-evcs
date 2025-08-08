@@ -12,7 +12,7 @@ diff --git a/arch/arm/dts/k3-am625-phyboard-lyra-rdk.dts b/arch/arm/dts/k3-am625
 index a438baf542..6e76176674 100644
 --- a/arch/arm/dts/k3-am625-phyboard-lyra-rdk.dts
 +++ b/arch/arm/dts/k3-am625-phyboard-lyra-rdk.dts
-@@ -152,6 +152,12 @@
+@@ -257,6 +257,12 @@
  		>;
  	};
  
@@ -25,17 +25,6 @@ index a438baf542..6e76176674 100644
  	main_usb1_pins_default: main-usb1-default-pins {
  		pinctrl-single,pins = <
  			AM62X_IOPAD(0x258, PIN_OUTPUT, 0) /* (F18) USB1_DRVVBUS */
-@@ -256,7 +262,9 @@
- };
- 
- &usb0 {
--	dr_mode = "peripheral";
-+	pinctrl-names = "default";
-+	dr_mode = "host";
-+	pinctrl-0 = <&main_usb0_pins_default>;
- };
- 
- &usb1 {
 -- 
 2.25.1
 

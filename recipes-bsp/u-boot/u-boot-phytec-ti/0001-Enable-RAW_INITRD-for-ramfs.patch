@@ -12,10 +12,9 @@ diff --git a/configs/phycore_am62x_a53_defconfig b/configs/phycore_am62x_a53_def
 index b285b1804c..3858a0db4b 100644
 --- a/configs/phycore_am62x_a53_defconfig
 +++ b/configs/phycore_am62x_a53_defconfig
-@@ -202,3 +202,4 @@ CONFIG_USB_GADGET_DOWNLOAD=y
+@@ -22,2 +22,3 @@ CONFIG_USB_GADGET_DOWNLOAD=y
+ CONFIG_SPL_DFU=y
  CONFIG_FS_FAT_MAX_CLUSTSIZE=16384
- CONFIG_SPL_GZIP=y
- CONFIG_OF_LIBFDT_OVERLAY=y
 +CONFIG_SUPPORT_RAW_INITRD=y
 -- 
 2.25.1
