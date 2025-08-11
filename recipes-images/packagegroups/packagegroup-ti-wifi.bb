@@ -11,6 +11,5 @@ RDEPENDS:${PN} = " \
     wpa-supplicant \
     iw \
     hostapd \
-    ti-cc33xx-firmware \
+    cc33xx-fw \
 "
-#linux-firmware-iwlwifi
