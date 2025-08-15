@@ -1,61 +1,64 @@
 This README file contains information on the contents of the
-meta-ksp0728 layer.
+meta-phyverso-evcs layer.
 
 Please see the corresponding sections below for details.
 
-phyLinux
-========
-This release can be build with the phyLinux tool. phyLinux is a wrapper around
-repo. repo itself grabs different git repositories defined in a xml
-manifest. phyLinux itself then does the correct configuration setup.
+Overview
+===================
+
+This meta-layer includes kernel and other necessary tools for setting up
+a BSP for the PHYTEC phyVerso-EVCS board.
+For using the powerline communication via the onboard Lumissil chips, you 
+will need a second meta-layer:
+
+https://github.com/phytec/meta-lumissil-greenphy/tree/scarthgap
 
 Getting the sources
 ===================
 
-If you have never used the Phytec git server before, you have to record
-the SSH host key in your local ~/.ssh/known_hosts file. Execute
+This meta-layer can be build with the PHYTEC BSP for phyBoard-Lyra
 
- ssh git@git.phytec.de info
+https://download.phytec.de/Software/Linux/BSP-Yocto-AM62x/BSP-Yocto-Ampliphy-AM62x-PD24.1.2/
 
-on your machine and type 'yes' to accept the key. It is only needed for the
-first connection.  For all subsequent checkouts via phyLinux you don't have to
-execute the command again.
+You can download the sources by using the PHYTEC phyLinux tool:
 
-Along with access to the meta-skeleton repository you should have recieved
-a xml file, defining the software release.
+https://download.phytec.de/Software/Linux/Yocto/Tools/phyLinux
 
-Start of in a new empty folder.
+Start the phyLinux tool
 
- wget ftp://ftp.phytec.de/pub/Software/Linux/Yocto/Tools/phyLinux
- chmod +x phyLinux
- ./phyLinux init -x <your_skeleton>.xml
+./phyLinux init
 
-You now have all needed sources inside sources/. In scripts/ there is
-a customized init script. It copies bblayers.conf, local.conf and
-conf-notes.txt templates. So the needed layers and machine is already
-configured.
+and select the correct BSP in the list presented by phyLinux. The machine is not important
+at this point, it will be modified later. Please refer to the phyboard-lyra documentation for more 
+information.
 
-More configuration
+https://docs.phytec.com/projects/yocto-phycore-am62x/en/latest/developingwithyocto/index.html
+
+When phyLinux script finished, source the folder:
+
+. ./sources/poky/oe-init-build-env
+
+Then go to the 'source' folder and clone this meta-layer.
+When using the Lumissil PLC chips on the phyVerso, also clone the meta-lumissil-greenphy layer. 
+
+Configure the BSP
 ==================
-Maybe you want to configure DL_DIR and SSTATE_DIR in your local.conf?
-hint: the init script searches for a site.conf at /etc/yocto/site.conf
-or ~/.site.conf. This is a good place for your common configurations.
+
+First, you have to modifiy the /build/conf/local.conf file. You can change the local.conf file according
+to your setup or you can start by copiing the sample local conf found in meta-phyverso-evcs/conf/local.conf.sample
+to the build/conf directory and renaming it.
+Add the new meta-layers to the bblayers.conf file in build/conf.
 
 
 Start building
 ==============
-To build the images for skeleton first the build enviroment needs to
-be sourced:
 
- source sources/poky/oe-init-build-env
-
-You will recieve an output with the buildable images.
 Start the build with:
 
- bitbake <image-name>
+ bitbake phyverso-evcs-image
 
 Images
 ======
 Images of the build can be found under
 
- build/deploy/images/<skeleton-machine>/.
+ build/deploy-ampliphy-rauc/images/am62-phyverso-evcs/.
