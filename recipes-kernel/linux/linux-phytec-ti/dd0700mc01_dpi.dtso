@@ -40,9 +40,13 @@
 		backlight = <&backlight1>;
 
 
-		port {
-			dpi_in1: endpoint {
-				remote-endpoint = <&lvds_receiver_out>;
+		ports {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			port@0 {
+				dpi_in1: endpoint {
+					remote-endpoint = <&dpi_receiver_out>;
+				};
 			};
 		};
 	};
@@ -108,7 +112,7 @@
 	port@1 {
 		reg = <1>;
 
-		lvds_receiver_out: endpoint {
+		dpi_receiver_out: endpoint {
 			remote-endpoint = <&dpi_in1>;
 			bus-width = <24>;
 		};
@@ -117,5 +121,14 @@
 
 &epwm1 {
 	status = "okay";
+};
+
+&oldi1 {
+	status = "okay";
+};
+
+&oldi0_ports {
+	#address-cells = <1>;
+	#size-cells = <0>;
 };
 
