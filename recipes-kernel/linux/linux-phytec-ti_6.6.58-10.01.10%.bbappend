@@ -12,6 +12,7 @@ SRC_URI:append = " \
                 file://0001-add-distec-dd-0700-mc01-dpi-display-settings.patch \
 		file://dd0700mc01_dpi.dtso \
 		file://dd0700mc01_lvds.dtso \
+		file://k3-am62-oldi-ac209a.dtso \
 		file://cc33xx.dtso \
 		file://cc33xx.cfg  \
 "
