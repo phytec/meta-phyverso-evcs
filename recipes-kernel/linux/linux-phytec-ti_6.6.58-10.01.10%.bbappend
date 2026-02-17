@@ -29,6 +29,8 @@ do_compile:prepend () {
        "${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts/ti/"
                 cp "${WORKDIR}/cc33xx.dtso" \
        "${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts/ti/"
+                cp "${WORKDIR}/k3-am62-oldi-ac209a.dtso" \
+       "${STAGING_KERNEL_DIR}/arch/${ARCH}/boot/dts/ti/"
 }
 
 
