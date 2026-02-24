@@ -1,1 +1,1 @@
-COMPATIBLE_MACHINE:append = "|am62-phyverso-evcs"
+COMPATIBLE_MACHINE:append = "|phyverso-evcs"
