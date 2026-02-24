@@ -1,0 +1,29 @@
+From bcc70636a4c8a4c88df55415a85c82607002b67f Mon Sep 17 00:00:00 2001
+From: Jonas Rockstroh <jonas.rockstroh@pionix.de>
+Date: Mon, 23 Feb 2026 14:48:50 +0000
+Subject: [PATCH] u-boot-dts: enable USB0 VBUS
+
+USB0_DRVVBUS pin is connected to TPS2553-1 load switch EN pin to enable power on X36 USB 2.0 Type-A connector
+
+Signed-off-by: Jonas Rockstroh <jonas.rockstroh@pionix.de>
+---
+ dts/upstream/src/arm64/ti/k3-am62x-phyboard-lyra.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/dts/upstream/src/arm64/ti/k3-am62x-phyboard-lyra.dtsi b/dts/upstream/src/arm64/ti/k3-am62x-phyboard-lyra.dtsi
+index aab74d6019b..44755d2f195 100644
+--- a/dts/upstream/src/arm64/ti/k3-am62x-phyboard-lyra.dtsi
++++ b/dts/upstream/src/arm64/ti/k3-am62x-phyboard-lyra.dtsi
+@@ -272,6 +272,12 @@
+ 		bootph-pre-ram;
+ 	};
+ 
++	main_usb0_pins_default: main-usb0-pins-default {
++		pinctrl-single,pins = <
++			AM62X_IOPAD(0x254, PIN_OUTPUT, 0) /* (C20) USB0_DRVVBUS */
++		>;
++	};
++
+ 	main_usb1_pins_default: main-usb1-default-pins {
+ 		pinctrl-single,pins = <
+ 			AM62X_IOPAD(0x258, PIN_OUTPUT, 0) /* (F18) USB1_DRVVBUS */
