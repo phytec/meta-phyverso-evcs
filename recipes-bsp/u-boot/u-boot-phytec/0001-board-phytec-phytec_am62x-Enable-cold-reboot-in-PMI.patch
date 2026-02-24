@@ -1,0 +1,83 @@
+From 633efb7db04322eec63d5355159652ed93cdab21 Mon Sep 17 00:00:00 2001
+From: Alexander Bauer <a.bauer@phytec.de>
+Date: Mon, 4 Aug 2025 13:09:43 +0200
+Subject: [PATCH] board: phytec: phytec_am62x: Enable cold reboot in PMIC
+
+Signed-off-by: Alexander Bauer <a.bauer@phytec.de>
+Signed-off-by: Daniel Schultz <d.schultz@phytec.de>
+---
+ board/phytec/phycore_am62x/phycore-am62x.c | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+
+diff --git a/board/phytec/phycore_am62x/phycore-am62x.c b/board/phytec/phycore_am62x/phycore-am62x.c
+index b199fdaa59b..d46383aaad0 100644
+--- a/board/phytec/phycore_am62x/phycore-am62x.c
++++ b/board/phytec/phycore_am62x/phycore-am62x.c
+@@ -16,11 +16,64 @@
+ 
+ #define AM64_DDRSS_SS_BASE	0x0F300000
+ #define DDRSS_V2A_CTL_REG	0x0020
++#define PMIC_BUS               0x0
++#define PMIC_ADDR              0x30
++#define MFP_2_CONFIG           0x20
++#define WARM_COLD_RESET_CONFIG  (1 << 6)
+ 
+ DECLARE_GLOBAL_DATA_PTR;
+ 
++int board_pmic_set_hw_reset()
++{
++#if CONFIG_IS_ENABLED(DM_I2C)
++	struct udevice *dev;
++	u8 ret, data;
++	int bus_num = PMIC_BUS;
++	int addr = PMIC_ADDR;
++	int offset = MFP_2_CONFIG;
++
++	ret = i2c_get_chip_for_busnum(bus_num, addr, 1, &dev);
++	if (ret) {
++		pr_err("%s: i2c PMIC not found: %i.\n", __func__, ret);
++		return ret;
++	}
++
++	ret = dm_i2c_read(dev, offset, &data, 1);
++	if (ret) {
++		pr_err("%s: Unable to read PMIC reg: %i\n", __func__, ret);
++		return ret;
++	}
++
++	if (ret)
++		return ret;
++
++	data &= ~WARM_COLD_RESET_CONFIG;
++
++	ret = dm_i2c_write(dev, offset, &data, 1);
++
++	if (ret) {
++		pr_err("%s: Unable to write PMIC reg: %i\n", __func__, ret);
++		return ret;
++	}
++#else
++	i2c_set_bus_num(bus_num);
++	ret = i2c_read(addr, offset, 2, &data, 1);
++
++	data &= ~WARM_COLD_RESET_CONFIG;
++
++	ret = dm_i2c_write(dev, offset, &data, 1);
++
++#endif
++	return ret;
++}
++
+ int board_init(void)
+ {
++	int result;
++
++	result = board_pmic_set_hw_reset();
++	if (result)
++		return result;
+ 	return 0;
+ }
+ 
+-- 
+2.43.0
+
