@@ -24,8 +24,4 @@ IMAGE_INSTALL = " \
     ${@bb.utils.contains("MACHINE_FEATURES", "tpm2", "packagegroup-sks-provision-tpm2", "", d)} \
 "
 
-#IMAGE_INSTALL:append:update = " packagegroup-update"
-
 IMAGE_INSTALL:append:am62 = " firmwared"
-#    ${@bb.utils.contains("COMBINED_FEATURES", "bluetooth", "packagegroup-bluetooth", "", d)}
-

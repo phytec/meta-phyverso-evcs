@@ -3,10 +3,6 @@ SECTION = "kernel"
 
 inherit allarch
 
-#LICENSE = "TI"
-#NO_GENERIC_LICENSE[Laird] = "LICENSE"
-#LIC_FILES_CHKSUM = "file://LICENSE;md5=53d3628b28a0bc3caea61587feade5f9"
-
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://../COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
@@ -32,4 +28,3 @@ FILES:${PN}:append = " \
     ${nonarch_base_libdir}/firmware/ti-connectivity/cc33xx_fw.bin \
     ${nonarch_base_libdir}/firmware/ti-connectivity/cc33xx-conf.bin \
 "
-

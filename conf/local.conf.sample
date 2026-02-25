@@ -1,4 +1,4 @@
-MACHINE ?= "am62-phyverso-evcs"
+MACHINE ?= "phyverso-evcs-am62xx-1"
 
 DISTRO ?= "ampliphy-rauc"
 

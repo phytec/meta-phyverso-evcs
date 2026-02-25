@@ -1,16 +1,8 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
-FILESEXTRAPATHS:prepend := "${THISDIR}/features:"
 
-SRC_URI:append:am62-phyverso-evcs = " \
-	file://0001-u-boot-enable-cold-reboot-in-PMIC.patch \
+SRC_URI:append:phyverso-evcs = "\
+    file://0001-board-phytec-phytec_am62x-Enable-cold-reboot-in-PMI.patch \
     file://0001-u-boot-dts-enable-USB0-VBUS.patch \
 "
 
-SRC_URI:append:am62-phyverso-evcs-k3r5 = " \
-	file://0001-u-boot-dts-enable-USB0-VBUS.patch \
-"
-
-
-COMPATIBLE_MACHINE:am62-phyverso-evcs = "am62-phyverso-evcs"
-COMPATIBLE_MACHINE:am62-phyverso-evcs-k3r5 = "am62-phyverso-evcs-k3r5"
-
+COMPATIBLE_MACHINE:append = "|phyverso-evcs"
